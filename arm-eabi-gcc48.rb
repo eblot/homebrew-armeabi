@@ -11,13 +11,15 @@ class ArmEabiGcc48 <Formula
   homepage  'http://gcc.gnu.org/'
   sha1      '810fb70bd721e1d9f446b6503afe0a9088b62986'
 
+  keg_only 'Enable installation of several GCC versions'
+
   depends_on 'gmp'
   depends_on 'libmpc'
   depends_on 'mpfr'
   depends_on 'cloog'
   depends_on 'isl'
   depends_on 'arm-eabi-binutils223'
-  depends_on 'gcc48'
+  depends_on 'gcc48' => :build
 
   def patches
     DATA
@@ -71,8 +73,7 @@ class ArmEabiGcc48 <Formula
                   "--with-libelf=#{libelf.opt_prefix}",
                   "--with-gxx-include-dir=#{prefix}/arm-eabi/include",
                   "--disable-debug", "--disable-__cxa_atexit",
-                  "--with-pkgversion=Neotion-SDK2-Jolly",
-                  "--with-bugurl=http://www.neotion.com"
+                  "--with-pkgversion=SDK2-Legolas"
       # Temp. workaround until GCC installation script is fixed
       system "mkdir -p #{prefix}/arm-eabi/lib/fpu/interwork"
       system "make"

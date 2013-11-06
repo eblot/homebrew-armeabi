@@ -5,6 +5,8 @@ class ArmEabiBinutils223 <Formula
   homepage 'http://www.gnu.org/software/binutils/'
   sha1 '042c51073205ebaf88c272d6168f9deb71984b56'
 
+  keg_only 'Enable installation of several binutils versions'
+
   depends_on 'gmp'
   depends_on 'mpfr'
   depends_on 'ppl11'
