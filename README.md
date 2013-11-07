@@ -35,8 +35,7 @@ Installation quick guide
 
         brew install cmake dash gettext git ninja pkg-config readline openssl subversion wget xz
 
-    * reject all requests to install 'javac'
-
+    reject all requests to install 'javac'
 
 8. Add the Versions Homebrew tap (for versioned tools)
 
