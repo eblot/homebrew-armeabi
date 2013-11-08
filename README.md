@@ -55,6 +55,7 @@ Installation quick guide
         brew install arm-eabi-gcc46
         brew install arm-eabi-gcc48
         brew install arm-eabi-sdk
+        brew install ecosconfig
 
 12. Add the Neotion DVB Homebrew tap
 
