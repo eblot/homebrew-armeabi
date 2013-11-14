@@ -10,64 +10,56 @@ Installation quick guide
 
         sudo xcode-select --install
 
-2. clean up homebrew
+2. Clean up homebrew installation directory: `/usr/local`
 
-        cd /usr/local
-        mv homebrew homebrew-prev
+    Be sure that all existing file or directory from a previous installation
+    in destination dir `/usr/local` may be overriden, or Homebrew installation scripts may fail with various errors.
 
-3. clean up your current PATH
+    It is safer to move out the whole `/usr/local` directory, and copy back
+    preexisting tools once the Homebrew installation is complete:
 
-        export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+        sudo mv /usr/local /usr/local-prev
+
+3. Clean up your current PATH
+
+        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 4. Download and install Homebrew from brew.sh
 
         ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
 
-5. Update your current path
-
-        export PATH=/usr/local/bin:$PATH
-
-6. Test your Homebrew installation, and report errors if any
+5. Test your Homebrew installation, and report errors if any
 
         brew doctor
 
-7. Install the default required packages
+6. Install the default required packages
 
         brew install cmake dash gettext git ninja pkg-config readline openssl subversion wget xz
 
-    reject all requests to install 'javac'
+    reject all requests to install 'javac', you do not need it
 
-8. Add the Versions Homebrew tap (for versioned tools)
+7. Add the required Homebrew tap (for versioned tools)
 
         brew tap homebrew/versions
+        brew tap eblot/armeabi
+        brew tap eblot/dvb
 
-9. Install the GCC native compiler (and its old dependencies)
+8. Install the GCC native compiler (and its old dependencies)
 
         brew install gcc48
 
-10. Add the Neotion SDK Homebrew tap
+9. Install toolchains (and their dependencies)
 
-        brew tap eblot/armeabi
+        brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc48
+        brew install arm-eabi-sdk ecosconfig
 
-11. Install toolchains (and their dependencies)
-
-        brew install arm-eabi-gcc45
-        brew install arm-eabi-gcc46
-        brew install arm-eabi-gcc48
-        brew install arm-eabi-sdk
-        brew install ecosconfig
-
-12. Add the Neotion DVB Homebrew tap
-
-        brew tap eblot/dvb
-
-13. Install DVB tools
+10. Install DVB tools
 
         brew install redbutton-author
-
-14. Install optional DVB tools  
-
         brew install opencaster dvbsnoop
+
+11. Do not forget to move back files/directories from a previous installation,
+    i.e. from `/usr/local-prev` to `/usr/local`
 
 
 Configuration
