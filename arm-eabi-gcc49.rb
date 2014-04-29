@@ -28,10 +28,6 @@ class ArmEabiGcc49 <Formula
   depends_on 'arm-eabi-binutils224'
   depends_on 'gcc48' => :build
 
-  def patches
-    DATA
-  end
-
   def install
 
     armeabi = 'arm-eabi-binutils224'
@@ -69,7 +65,7 @@ class ArmEabiGcc49 <Formula
                   "--with-newlib", "--enable-softfloat", "--disable-bigendian",
                   "--disable-fpu", "--disable-underscore", "--enable-multilibs",
                   "--with-float=soft", "--enable-interwork", "--enable-lto",
-                  "--with-multilib",
+                  "--with-multilib", "--enable-plugins",
                   "--with-abi=aapcs", "--enable-languages=c,c++",
                   "--with-gmp=#{gmp.opt_prefix}",
                   "--with-mpfr=#{mpfr.opt_prefix}",
@@ -91,18 +87,3 @@ class ArmEabiGcc49 <Formula
                    "#{prefix}/arm-eabi/bin"
   end
 end
-
-__END__
---- a/gcc/config/arm/t-arm-elf	2011-01-03 21:52:22.000000000 +0100
-+++ b/gcc/config/arm/t-arm-elf	2011-07-18 16:03:31.000000000 +0200
-@@ -71,8 +71,8 @@
- # MULTILIB_DIRNAMES   += fpu soft
- # MULTILIB_EXCEPTIONS += *mthumb/*mhard-float*
- # 
--# MULTILIB_OPTIONS    += mno-thumb-interwork/mthumb-interwork
--# MULTILIB_DIRNAMES   += normal interwork
-+MULTILIB_OPTIONS    += mno-thumb-interwork/mthumb-interwork
-+MULTILIB_DIRNAMES   += normal interwork
- # 
- # MULTILIB_OPTIONS    += fno-leading-underscore/fleading-underscore
- # MULTILIB_DIRNAMES   += elf under

@@ -14,7 +14,7 @@ class ArmEabiBinutils224 <Formula
 
   def install
     system "./configure", "--prefix=#{prefix}", "--target=arm-eabi",
-                "--disable-shared", "--disable-nls",
+                "--disable-shared", "--disable-nls", "--enable-lto",
                 "--with-gmp=#{Formula.factory('gmp').prefix}",
                 "--with-mpfr=#{Formula.factory('mpfr').prefix}",
                 "--with-ppl=#{Formula.factory('ppl11').prefix}",
