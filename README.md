@@ -26,7 +26,11 @@ Installation quick guide
 
 4. Download and install Homebrew from brew.sh
 
-        ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+        ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+        
+   Brew have already updated the installation URL in the past. In the event of
+   an installation failure due to an invalid URL, please check out the official
+   web site to retrieve the updated URL, from http://brew.sh/#install
 
 5. Test your Homebrew installation, and report errors if any
 
