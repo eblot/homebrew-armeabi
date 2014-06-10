@@ -50,11 +50,11 @@ Installation quick guide
 
 8. Install the GCC native compiler (and its old dependencies)
 
-        brew install gcc48
+        brew install gcc49
 
 9. Install toolchains (and their dependencies)
 
-        brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc48
+        brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc49
         brew install arm-eabi-sdk ecosconfig
 
 10. Install DVB tools
