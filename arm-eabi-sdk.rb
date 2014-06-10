@@ -23,7 +23,7 @@ end
 __END__
 --- a/sdk.sh	1970-01-01 01:00:00.000000000 +0100
 +++ b/sdk.sh	2013-11-13 12:03:12.000000000 +0100
-@@ -0,0 +1,74 @@
+@@ -0,0 +1,83 @@
 +#!/bin/sh
 +
 +usage()
@@ -35,7 +35,7 @@ __END__
 +
 +if [ $# -lt 1 ]; then
 +    usage
-+    exit 1
++    return
 +fi
 +
 +SDK_VERSION="$1"
@@ -53,9 +53,13 @@ __END__
 +        PYTHONVER="33"
 +        GCC_VERSION="8"
 +        ;;
++    4)
++        PYTHONVER="27"
++        GCC_VERSION="9"
++        ;;
 +    *)
 +        echo "Unsupported SDK variant: ${SDK_VERSION}" >&2
-+        exit 1
++        return
 +        ;;
 +esac
 +
@@ -80,22 +84,26 @@ __END__
 +        NEOSDK_ARMCC_VER="4.8.2"
 +        NEOSDK_ARMBU_VER="2.23.2"
 +        ;;
++    9)
++        NEOSDK_ARMCC_VER="4.9.0"
++        NEOSDK_ARMBU_VER="2.24"
++        ;;
 +    *)
 +        echo "Unsupported GCC variant: ${GCC_VERSION}" >&2
-+        exit 1
++        return
 +        ;;
 +esac
 +
++OPTPATH="/usr/local/opt"
 +ARMCCVER=`echo "${NEOSDK_ARMCC_VER}" | cut -d. -f1-2 | tr -d .`
 +ARMBUVER=`echo "${NEOSDK_ARMBU_VER}" | cut -d. -f1-2 | tr -d .`
 +PYTHONPATH=/usr/local/py${PYTHONVER}/bin
-+ARMBUPATTERN="/usr/local/Cellar/arm-eabi-binutils${ARMBUVER}/${NEOSDK_ARMBU_VER}"
-+ARMBUPATH=`ls -1d "${ARMBUPATTERN}"?/bin | tail -1`
-+ARMCCPATH=/usr/local/Cellar/arm-eabi-gcc${ARMCCVER}/${NEOSDK_ARMCC_VER}/bin
++ARMBUPATTERN="${OPTPATH}/arm-eabi-binutils${ARMBUVER}"
++ARMBUPATH=`ls -1d "${ARMBUPATTERN}"*/bin | tail -1`
++ARMCCPATH=${OPTPATH}/arm-eabi-gcc${ARMCCVER}/bin
 +SYSPATH=/usr/bin:/bin:/usr/sbin:/sbin
 +GETTEXTPATH=`ls -1d /usr/local/Cellar/gettext/*/bin | tail -1`
 +
 +export PATH=${PYTHONPATH}:${ARMCCPATH}:${ARMBUPATH}:${GETTEXTPATH}:/usr/local/bin:${SYSPATH}
 +export NEOSDK_ARMCC_VER
 +export NEOSDK_ARMBU_VER
-
