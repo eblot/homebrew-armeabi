@@ -1,11 +1,5 @@
 require 'formula'
 
-class ArmEabiNewLib <Formula
-  url       'ftp://sourceware.org/pub/newlib/newlib-2.0.0.tar.gz'
-  homepage  'http://sourceware.org/newlib/'
-  sha1      'ea6b5727162453284791869e905f39fb8fab8d3f'
-end
-
 class ArmEabiGcc48 <Formula
   url       'http://ftpmirror.gnu.org/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2'
   homepage  'http://gcc.gnu.org/'
@@ -21,6 +15,11 @@ class ArmEabiGcc48 <Formula
   depends_on 'arm-eabi-binutils223'
   depends_on 'gcc48' => :build
 
+  resource "newlib20" do
+    url       'ftp://sourceware.org/pub/newlib/newlib-2.0.0.tar.gz'
+    sha1      'ea6b5727162453284791869e905f39fb8fab8d3f'
+  end
+
   def patches
     DATA
   end
@@ -30,10 +29,11 @@ class ArmEabiGcc48 <Formula
     armeabi = 'arm-eabi-binutils223'
 
     coredir = Dir.pwd
-    ArmEabiNewLib.new.brew {
-        system "ditto", Dir.pwd+'/libgloss', coredir+'/libgloss'
-        system "ditto", Dir.pwd+'/newlib', coredir+'/newlib'
-    }
+
+    resource("newlib20").stage do
+      system "ditto", Dir.pwd+'/libgloss', coredir+'/libgloss'
+      system "ditto", Dir.pwd+'/newlib', coredir+'/newlib'
+    end
 
     gmp = Formula.factory 'gmp'
     mpfr = Formula.factory 'mpfr'

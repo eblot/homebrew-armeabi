@@ -1,18 +1,5 @@
 require 'formula'
 
-# Issue in libgloss build with newlib 2.1
-#class ArmEabiNewLib <Formula
-#  url       'ftp://sourceware.org/pub/newlib/newlib-2.1.0.tar.gz'
-#  homepage  'http://sourceware.org/newlib/'
-#  sha1      '364d569771866bf55cdbd1f8c4a6fa5c9cf2ef6c'
-#end
-
-class ArmEabiNewLib <Formula
-  url       'ftp://sourceware.org/pub/newlib/newlib-2.0.0.tar.gz'
-  homepage  'http://sourceware.org/newlib/'
-  sha1      'ea6b5727162453284791869e905f39fb8fab8d3f'
-end
-
 class ArmEabiGcc49 <Formula
   url       'http://ftpmirror.gnu.org/gcc/gcc-4.9.0/gcc-4.9.0.tar.bz2'
   homepage  'http://gcc.gnu.org/'
@@ -28,15 +15,25 @@ class ArmEabiGcc49 <Formula
   depends_on 'arm-eabi-binutils224'
   depends_on 'gcc48' => :build
 
+  resource "newlib20" do
+    url       'ftp://sourceware.org/pub/newlib/newlib-2.0.0.tar.gz'
+    sha1      'ea6b5727162453284791869e905f39fb8fab8d3f'
+  end
+
+  # Issue in libgloss build with newlib 2.1
+  #  url       'ftp://sourceware.org/pub/newlib/newlib-2.1.0.tar.gz'
+  #  sha1      '364d569771866bf55cdbd1f8c4a6fa5c9cf2ef6c'
+
   def install
 
     armeabi = 'arm-eabi-binutils224'
 
     coredir = Dir.pwd
-    ArmEabiNewLib.new.brew {
-        system "ditto", Dir.pwd+'/libgloss', coredir+'/libgloss'
-        system "ditto", Dir.pwd+'/newlib', coredir+'/newlib'
-    }
+
+    resource("newlib20").stage do
+      system "ditto", Dir.pwd+'/libgloss', coredir+'/libgloss'
+      system "ditto", Dir.pwd+'/newlib', coredir+'/newlib'
+    end
 
     gmp = Formula.factory 'gmp'
     mpfr = Formula.factory 'mpfr'

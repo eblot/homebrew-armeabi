@@ -1,17 +1,5 @@
 require 'formula'
 
-class ArmEabiNewLib19 <Formula
-  url       'ftp://sources.redhat.com/pub/newlib/newlib-1.19.0.tar.gz'
-  homepage  'http://sourceware.org/newlib/'
-  sha1      'b2269d30ce7b93b7c714b90ef2f40221c2df0fcd'
-end
-
-class ArmEabiGpp45 <Formula
-  url       'http://ftpmirror.gnu.org/gcc/gcc-4.5.4/gcc-g++-4.5.4.tar.bz2'
-  homepage  'http://gcc.gnu.org/'
-  sha1      'cfb8a3b7596d35da9f09823b3dd860b206f4abca'
-end
-
 class ArmEabiGcc45 <Formula
   url       'http://ftpmirror.gnu.org/gcc/gcc-4.5.4/gcc-core-4.5.4.tar.bz2'
   homepage  'http://gcc.gnu.org/'
@@ -28,6 +16,16 @@ class ArmEabiGcc45 <Formula
   depends_on 'arm-eabi-binutils221'
   depends_on 'gcc48' => :build
 
+  resource "newlib19" do
+    url       'ftp://sources.redhat.com/pub/newlib/newlib-1.19.0.tar.gz'
+    sha1      'b2269d30ce7b93b7c714b90ef2f40221c2df0fcd'
+  end
+
+  resource "gpp45" do
+    url       'http://ftpmirror.gnu.org/gcc/gcc-4.5.4/gcc-g++-4.5.4.tar.bz2'
+    sha1      'cfb8a3b7596d35da9f09823b3dd860b206f4abca'
+  end
+
   def patches
     DATA
   end
@@ -37,13 +35,15 @@ class ArmEabiGcc45 <Formula
     armeabi = 'arm-eabi-binutils221'
 
     coredir = Dir.pwd
-    ArmEabiGpp45.new.brew { 
+
+    resource("gpp45").stage do
       system "ditto", Dir.pwd, coredir 
-    }
-    ArmEabiNewLib19.new.brew {
-        system "ditto", Dir.pwd+'/libgloss', coredir+'/libgloss'
-        system "ditto", Dir.pwd+'/newlib', coredir+'/newlib'
-    }
+    end
+
+    resource("newlib19").stage do
+      system "ditto", Dir.pwd+'/libgloss', coredir+'/libgloss'
+      system "ditto", Dir.pwd+'/newlib', coredir+'/newlib'
+    end
 
     gmp = Formula.factory 'gmp'
     mpfr = Formula.factory 'mpfr'
