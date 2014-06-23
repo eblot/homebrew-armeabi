@@ -22,8 +22,8 @@ end
 
 __END__
 --- a/sdk.sh	1970-01-01 01:00:00.000000000 +0100
-+++ b/sdk.sh	2013-11-13 12:03:12.000000000 +0100
-@@ -0,0 +1,83 @@
++++ b/sdk.sh	2014-06-23 18:29:24.000000000 +0200
+@@ -0,0 +1,87 @@
 +#!/bin/sh
 +
 +usage()
@@ -49,13 +49,13 @@ __END__
 +        PYTHONVER="27"
 +        GCC_VERSION="6"
 +        ;;
++    2[q-z])
++        PYTHONVER="27"
++        GCC_VERSION="9"
++        ;;
 +    3)
 +        PYTHONVER="33"
 +        GCC_VERSION="8"
-+        ;;
-+    4)
-+        PYTHONVER="27"
-+        GCC_VERSION="9"
 +        ;;
 +    *)
 +        echo "Unsupported SDK variant: ${SDK_VERSION}" >&2
@@ -107,3 +107,7 @@ __END__
 +export PATH=${PYTHONPATH}:${ARMCCPATH}:${ARMBUPATH}:${GETTEXTPATH}:/usr/local/bin:${SYSPATH}
 +export NEOSDK_ARMCC_VER
 +export NEOSDK_ARMBU_VER
++
++PYTHONVERSTR="`echo "${PYTHONVER}" | cut -c1`.`echo "${PYTHONVER}" | cut -c2`"
++echo "GCC v${NEOSDK_ARMCC_VER}, Binutils v${NEOSDK_ARMBU_VER}, Python v${PYTHONVERSTR}"
++
