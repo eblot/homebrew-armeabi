@@ -85,7 +85,7 @@ __END__
 +        NEOSDK_ARMBU_VER="2.23.2"
 +        ;;
 +    9)
-+        NEOSDK_ARMCC_VER="4.9.0"
++        NEOSDK_ARMCC_VER="4.9.1"
 +        NEOSDK_ARMBU_VER="2.24"
 +        ;;
 +    *)
