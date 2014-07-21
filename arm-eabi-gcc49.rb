@@ -70,7 +70,7 @@ class ArmEabiGcc49 <Formula
                   "--with-libelf=#{libelf.opt_prefix}",
                   "--with-gxx-include-dir=#{prefix}/arm-eabi/include",
                   "--disable-debug", "--disable-__cxa_atexit",
-                  "--with-pkgversion=SDK2-Quennar"
+                  "--with-pkgversion=SDK2-Radagast"
       # Temp. workaround until GCC installation script is fixed
       system "mkdir -p #{prefix}/arm-eabi/lib/fpu/interwork"
       system "make"
