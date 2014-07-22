@@ -6,7 +6,7 @@ Homebrew tap for ARM EABI toolchain, dedicated to eCos RTOS
 Installation quick guide
 ------------------------
 
-1. Install the XCode 5.0.1 command line tools
+1. Install the XCode 5.1.1 (or above) command line tools
 
         sudo xcode-select --install
 
@@ -40,7 +40,7 @@ Installation quick guide
 
         brew install cmake dash gettext git ninja pkg-config readline openssl subversion wget xz
 
-    reject all requests to install 'javac', you do not need it
+    reject all requests to install 'javac' if any, as you do not need it
 
 7. Add the required Homebrew tap (for versioned tools)
 
@@ -48,24 +48,21 @@ Installation quick guide
         brew tap eblot/armeabi
         brew tap eblot/dvb
 
-8. Install the GCC native compiler (and its old dependencies)
+8. Install toolchains (and their dependencies)
 
-        brew install gcc49
+        brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc49 arm-eabi-sdk ecosconfig
 
-9. Install toolchains (and their dependencies)
+9. Install DVB tools
 
-        brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc49
-        brew install arm-eabi-sdk ecosconfig
+        brew install redbutton-author opencaster dvbsnoop
 
-10. Install DVB tools
+10. Do not forget to move back the files and directories that you may want to
+    keep from a previous installation, i.e. from `/usr/local-prev` to `/usr/local`.
 
-        brew install redbutton-author
-        brew install opencaster dvbsnoop
-
-11. Do not forget to move back files/directories from a previous installation,
-    i.e. from `/usr/local-prev` to `/usr/local`
-
-
+11. Take some time to clean up your `~/.bashrc` file that you may have 
+    customized with a previous installation. You should not need to define
+    any `HOMEBREW`* environment variable(s).
+ 
 Configuration
 -------------
 
@@ -73,4 +70,4 @@ From a terminal, source the `sdk.sh` script with an SDK version number to
 set the proper environment variable for an SDK release. Ex:
 
     # Set up env for SDK2
-    . sdk.sh 2
+    . sdk.sh 2r
