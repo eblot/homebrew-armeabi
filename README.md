@@ -6,7 +6,7 @@ Homebrew tap for ARM EABI toolchain, dedicated to eCos RTOS
 Installation quick guide
 ------------------------
 
-1. Install the XCode 5.0.1 command line tools
+1. Install the XCode 5.1.1 (or above) command line tools
 
         sudo xcode-select --install
 
@@ -46,31 +46,21 @@ Installation quick guide
         brew tap eblot/armeabi
         brew tap eblot/dvb
 
-8. Install the GCC native compiler (and its old dependencies)
-
-        brew install gcc49
-
-9. Install toolchains (and their dependencies)
+8. Install toolchains (and their dependencies)
 
         brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc49
         brew install arm-eabi-sdk ecosconfig cmake28 cmake30
 
    reject all requests to install 'javac', you do not need it
 
-10. Install DVB tools
+9. Install DVB tools
 
-        brew install redbutton-author
-        brew install opencaster dvbsnoop
+        brew install redbutton-author opencaster dvbsnoop
 
-11. Do not forget to move back files/directories from a previous installation,
-    i.e. from `/usr/local-prev` to `/usr/local`
+10. Do not forget to move back the files and directories that you may want to
+    keep from a previous installation, i.e. from `/usr/local-prev` to `/usr/local`.
 
-
-Configuration
--------------
-
-From a terminal, source the `sdk.sh` script with an SDK version number to
-set the proper environment variable for an SDK release. Ex:
-
-    # Set up env for SDK2
-    . sdk.sh 2
+11. Take some time to clean up your `~/.bashrc` file that you may have 
+    customized with a previous installation. You should not need to define
+    any `HOMEBREW`* environment variable(s).
+ 
