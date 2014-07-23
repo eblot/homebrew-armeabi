@@ -20,26 +20,14 @@ class NoExpatFramework < Requirement
   end
 end
 
-class Cmake3 < Formula
+class Cmake30 < Formula
   homepage 'http://www.cmake.org/'
-  #url 'http://www.cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz'
-  #sha1 'cca70b307aa32a6a32c72e01fdfcecc84c1c2690'
+  url 'http://www.cmake.org/files/v3.0/cmake-3.0.0.tar.gz'
+  sha1 '4dfd9ee9b829c77175d655f22322f14747f11ad2'
 
-  head 'http://cmake.org/cmake.git'
-
-  #bottle do
-  #  cellar :any
-  #  revision 2
-  #  sha1 "e1e50cfd9f421b64365a7a2c34e9e6337f9391b7" => :mavericks
-  #  sha1 "9c60ed323f8752eb257d1505e33d70e4367e4219" => :mountain_lion
-  #  sha1 "1914f68373cdc8d1c99b4d76e1e1fed85e4303d3" => :lion
-  #end
+  keg_only 'Enable installation of several CMake versions'
 
   depends_on NoExpatFramework
-
-  def patches
-    { 'p1' => ['http://www.cmake.org/Bug/file_download.php?file_id=5122&type=bug'] }
-  end
 
   def install
     args = %W[
