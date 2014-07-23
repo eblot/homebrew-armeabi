@@ -7,7 +7,7 @@ end
 class ArmEabiSdk <Formula
 
   url 'none', :using => NoFileStrategy
-  version '1.2'
+  version '1.3'
   sha1 ''
 
   def install
@@ -35,18 +35,22 @@ class ArmEabiSdk <Formula
           1)
               PYTHONVER="26"
               GCC_VERSION="6"
+              CMAKE_VERSION="28"
               ;;
           2)
               PYTHONVER="27"
               GCC_VERSION="6"
+              CMAKE_VERSION="28"
               ;;
-          2[q-z]|2[Q-Z])
+          2[r-z]|2[R-Z])
               PYTHONVER="27"
               GCC_VERSION="9"
+              CMAKE_VERSION="30"
               ;;
           3)
               PYTHONVER="33"
               GCC_VERSION="8"
+              CMAKE_VERSION="30"
               ;;
           *)
               echo "Unsupported SDK variant: ${SDK_VERSION}" >&2
@@ -92,10 +96,11 @@ class ArmEabiSdk <Formula
       ARMBUPATTERN="${OPTPATH}/arm-eabi-binutils${ARMBUVER}"
       ARMBUPATH=`ls -1d "${ARMBUPATTERN}"*/bin | tail -1`
       ARMCCPATH=${OPTPATH}/arm-eabi-gcc${ARMCCVER}/bin
+      CMAKEPATH=${OPTPATH}/cmake${CMAKE_VERSION}/bin
       SYSPATH=/usr/bin:/bin:/usr/sbin:/sbin
       GETTEXTPATH=`ls -1d /usr/local/Cellar/gettext/*/bin | tail -1`
       
-      export PATH=${PYTHONPATH}:${ARMCCPATH}:${ARMBUPATH}:${GETTEXTPATH}:/usr/local/bin:${SYSPATH}
+      export PATH=${PYTHONPATH}:${ARMCCPATH}:${ARMBUPATH}:${CMAKEPATH}:${GETTEXTPATH}:/usr/local/bin:${SYSPATH}
       export NEOSDK_ARMCC_VER
       export NEOSDK_ARMBU_VER
       

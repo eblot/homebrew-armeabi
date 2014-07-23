@@ -38,9 +38,7 @@ Installation quick guide
 
 6. Install the default required packages
 
-        brew install cmake dash gettext git ninja pkg-config readline openssl subversion wget xz
-
-    reject all requests to install 'javac', you do not need it
+        brew install dash gettext git ninja pkg-config readline openssl subversion wget xz
 
 7. Add the required Homebrew tap (for versioned tools)
 
@@ -55,7 +53,9 @@ Installation quick guide
 9. Install toolchains (and their dependencies)
 
         brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc49
-        brew install arm-eabi-sdk ecosconfig
+        brew install arm-eabi-sdk ecosconfig cmake28 cmake30
+
+   reject all requests to install 'javac', you do not need it
 
 10. Install DVB tools
 
