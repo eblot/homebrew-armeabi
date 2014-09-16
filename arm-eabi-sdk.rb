@@ -105,7 +105,8 @@ class ArmEabiSdk <Formula
       export NEOSDK_ARMBU_VER
       
       PYTHONVERSTR="`echo "${PYTHONVER}" | cut -c1`.`echo "${PYTHONVER}" | cut -c2`"
-      echo "GCC v${NEOSDK_ARMCC_VER}, Binutils v${NEOSDK_ARMBU_VER}, Python v${PYTHONVERSTR}"
+      CMAKEVERSTR=`${CMAKEPATH}/cmake --version 2>&1 | head -1 | sed s'/^[^0-9\.]*//'`
+      echo "GCC v${NEOSDK_ARMCC_VER}, Binutils v${NEOSDK_ARMBU_VER}, Python v${PYTHONVERSTR}, CMake v${CMAKEVERSTR}"
     EOS
   end
 end
