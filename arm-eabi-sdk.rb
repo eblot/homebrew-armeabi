@@ -7,7 +7,7 @@ end
 class ArmEabiSdk <Formula
 
   url 'none', :using => NoFileStrategy
-  version '1.3'
+  version '1.3.1'
   sha1 ''
 
   def install
