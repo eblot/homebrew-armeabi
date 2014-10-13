@@ -7,7 +7,7 @@ end
 class ArmEabiSdk <Formula
 
   url 'none', :using => NoFileStrategy
-  version '1.3.1'
+  version '1.4.0'
   sha1 ''
 
   def install
@@ -19,18 +19,33 @@ class ArmEabiSdk <Formula
       
       usage()
       {
-          NAME=`basename $0`
-          echo "$NAME <sdk_version> [gcc_version]"
-          echo "Set up Neotion SDK toolchain"
+          echo ". sdk.sh [sdk_version] [gcc_version]"
+          echo "  Set up Neotion SDK toolchain"
       }
       
-      if [ $# -lt 1 ]; then
+      if [ "$1" = "-h" ]; then
           usage
           return
       fi
       
       SDK_VERSION="$1"
       
+      if [ -z "${SDK_VERSION}" ]; then
+          SDKVER=`svn pg neo:sdk | head -1 | tr -d [[:space:]]`
+          SDKNAME=`svn pg neo:sdkname | head -1 | cut -c1`
+          if [ -n "${SDKVER}" -a -n "${SDKNAME}" ]; then
+              SDK_VERSION="${SDKVER}${SDKNAME}"
+          fi
+      fi
+
+      if [ -z "${SDK_VERSION}" ]; then
+          usage
+          return
+      fi
+
+      unset NEOSDK_CMAKE_VER
+      unset NEOSDK_USE_NINJA
+
       case "${SDK_VERSION}" in
           1)
               PYTHONVER="26"
@@ -105,8 +120,8 @@ class ArmEabiSdk <Formula
       export NEOSDK_ARMBU_VER
       
       PYTHONVERSTR="`echo "${PYTHONVER}" | cut -c1`.`echo "${PYTHONVER}" | cut -c2`"
-      CMAKEVERSTR=`${CMAKEPATH}/cmake --version 2>&1 | head -1 | sed s'/^[^0-9\.]*//'`
-      echo "GCC v${NEOSDK_ARMCC_VER}, Binutils v${NEOSDK_ARMBU_VER}, Python v${PYTHONVERSTR}, CMake v${CMAKEVERSTR}"
+      CMAKEVERSTR=`${CMAKEPATH}/cmake --version 2>&1 | head -1 | sed s'/^[^0-9.]*//'`
+      echo "SDK ${SDK_VERSION}, GCC v${NEOSDK_ARMCC_VER}, Binutils v${NEOSDK_ARMBU_VER}, Python v${PYTHONVERSTR}, CMake v${CMAKEVERSTR}"
     EOS
   end
 end
