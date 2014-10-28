@@ -7,7 +7,7 @@ end
 class ArmEabiSdk <Formula
 
   url 'none', :using => NoFileStrategy
-  version '1.4.0'
+  version '1.4.1'
   sha1 ''
 
   def install
@@ -115,6 +115,15 @@ class ArmEabiSdk <Formula
       SYSPATH=/usr/bin:/bin:/usr/sbin:/sbin
       GETTEXTPATH=`ls -1d /usr/local/Cellar/gettext/*/bin | tail -1`
       
+      if [ ! -x ${CMAKEPATH}/cmake ]; then
+          echo "CMake v${CMAKE_VERSION} is not installed" >&2
+          exit 1
+      fi
+      if [ ! -x ${PYTHONPATH}/python ]; then
+          echo "Python virtualenv v${PYTHONVER} is not installed" >&2
+          exit 1
+      fi
+
       export PATH=${PYTHONPATH}:${ARMCCPATH}:${ARMBUPATH}:${CMAKEPATH}:${GETTEXTPATH}:/usr/local/bin:${SYSPATH}
       export NEOSDK_ARMCC_VER
       export NEOSDK_ARMBU_VER
