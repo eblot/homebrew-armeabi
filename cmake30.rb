@@ -22,8 +22,8 @@ end
 
 class Cmake30 < Formula
   homepage 'http://www.cmake.org/'
-  url 'http://www.cmake.org/files/v3.0/cmake-3.0.0.tar.gz'
-  sha1 '4dfd9ee9b829c77175d655f22322f14747f11ad2'
+  url 'http://www.cmake.org/files/v3.0/cmake-3.0.2.tar.gz'
+  sha1 '379472e3578902a1d6f8b68a9987773151d6f21a'
 
   keg_only 'Enable installation of several CMake versions'
 
