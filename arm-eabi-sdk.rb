@@ -168,13 +168,13 @@ class ArmEabiSdk <Formula
       CMAKEVERSTR=`cmake --version 2>&1 | head -1 | sed s'/^[^0-9.]*//'`
       printf "SDK ${SDK_VERSION}: "
       if [ -n "${NEOSDK_ARMCC_VER}" ]; then 
-          GCCVERSTR="`${ARCH}-gcc --version | head -1 | \
-                     sed 's/^.* \([0-9\.]\{1,\}\)$/\1/'`"
+          GCCVERSTR="`${ARCH}-gcc --version | head -1 | \\
+                     sed 's/^.* \\([0-9\\.]\\{1,\\}\\)$/\\1/'`"
           printf "GCC v${GCCVERSTR}, ";
       fi
       if [ -n "${NEOSDK_ARMCL_VER}" ]; then 
-          CLANGVERSTR="`${ARCH}-clang --version | head -1 | \
-                       sed 's/^.* \([0-9\.]\{1,\}\) .*$/\1/'`"
+          CLANGVERSTR="`${ARCH}-clang --version | head -1 | \\
+                       sed 's/^.* \\([0-9\.]\\{1,\\}\\) .*$/\\1/'`"
           printf "Clang v${CLANGVERSTR}, "
       fi
       printf "Binutils v${NEOSDK_ARMBU_VER}, "
