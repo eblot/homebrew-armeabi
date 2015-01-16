@@ -10,8 +10,7 @@ class ArmEabiSdk <Formula
   version '1.5.0'
   sha1 ''
 
-  def install
-    #mkdir "#{prefix}/bin"
+  def stage(target=nil, &block)
     bin.mkpath
     path = bin+"sdk.sh"
     path.write <<-EOS.undent
@@ -41,8 +40,8 @@ class ArmEabiSdk <Formula
       SDK_VERSION="$1"
       
       if [ -z "${SDK_VERSION}" ]; then
-          SDKVER=`svn pg neo:sdk | head -1 | tr -d [[:space:]]`
-          SDKNAME=`svn pg neo:sdkname | head -1 | cut -c1`
+          SDKVER=`svn pg neo:sdk 2>/dev/null | head -1 | tr -d [[:space:]]`
+          SDKNAME=`svn pg neo:sdkname 2>/dev/null | head -1 | cut -c1`
           if [ -n "${SDKVER}" -a -n "${SDKNAME}" ]; then
               SDK_VERSION="${SDKVER}${SDKNAME}"
           fi
@@ -181,7 +180,7 @@ class ArmEabiSdk <Formula
       printf "Binutils v${NEOSDK_ARMBU_VER}, "
       printf "Python v${PYTHONVERSTR}, "
       printf "CMake v${CMAKEVERSTR}"
-      printf "\n"
+      printf "\\n"
     EOS
   end
 end
