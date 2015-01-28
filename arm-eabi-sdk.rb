@@ -7,7 +7,7 @@ end
 class ArmEabiSdk <Formula
 
   url 'none', :using => NoFileStrategy
-  version '1.5.0'
+  version '1.5.1'
   sha1 ''
 
   def stage(target=nil, &block)
@@ -91,7 +91,7 @@ class ArmEabiSdk <Formula
               CMAKE_VER="30"
               PYTHON_VER="27"
               ;;
-          3)
+          3*)
               ARCH="arm-elf32-minix"
               NEOSDK_ARMCL_VER="3.5"
               NEOSDK_ARMBU_VER="2.25"
