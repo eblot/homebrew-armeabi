@@ -10,8 +10,6 @@ class ArmEabiGcc49 <Formula
   depends_on 'gmp'
   depends_on 'libmpc'
   depends_on 'mpfr'
-  depends_on 'cloog'
-  depends_on 'isl'
   depends_on 'arm-eabi-binutils224'
   depends_on 'gcc49' => :build
 
@@ -35,8 +33,6 @@ class ArmEabiGcc49 <Formula
     gmp = Formula.factory 'gmp'
     mpfr = Formula.factory 'mpfr'
     libmpc = Formula.factory 'libmpc'
-    cloog = Formula.factory 'cloog'
-    isl = Formula.factory 'isl'
     libelf = Formula.factory 'libelf'
     binutils = Formula.factory armeabi
     gcc49 = Formula.factory 'gcc49'
@@ -64,9 +60,6 @@ class ArmEabiGcc49 <Formula
                   "--with-gmp=#{gmp.opt_prefix}",
                   "--with-mpfr=#{mpfr.opt_prefix}",
                   "--with-mpc=#{libmpc.opt_prefix}",
-                  "--with-cloog=#{cloog.opt_prefix}",
-                  "--enable-cloog-backend=isl",
-                  "--with-isl=#{isl.opt_prefix}",
                   "--with-libelf=#{libelf.opt_prefix}",
                   "--with-gxx-include-dir=#{prefix}/arm-eabi/include",
                   "--disable-debug", "--disable-__cxa_atexit",
