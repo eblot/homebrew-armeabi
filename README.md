@@ -48,11 +48,16 @@ Installation quick guide
         brew tap homebrew/versions
         brew tap eblot/armeabi
         brew tap eblot/dvb
+        brew tap eblot/devtools
 
 9. Install toolchains (and their dependencies)
 
-        brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc49
-        brew install arm-eabi-sdk ecosconfig cmake28 cmake30
+        brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc49 ecosconfig
+        brew install cmake28 
+        brew unlink  cmake28
+        brew install cmake30 
+        brew unlink  cmake30
+        brew install sdk-script sbx-script
 
    reject all requests to install 'javac', you do not need it
 
