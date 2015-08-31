@@ -51,15 +51,33 @@ Installation quick guide
         brew tap eblot/devtools
 
 9. Install toolchains (and their dependencies)
+   Reject all requests to install 'javac', you do not need it.
 
-        brew install arm-eabi-gcc45 arm-eabi-gcc46 arm-eabi-gcc49 ecosconfig
-        brew install cmake28 
-        brew unlink  cmake28
-        brew install cmake30 
-        brew unlink  cmake30
-        brew install sdk-script sbx-script
+    * All SDKs
+        
+            brew install ecosconfig arm-eabi-gdb
+            brew install sdk-script sbx-script
 
-   reject all requests to install 'javac', you do not need it
+    * To build for all SDK1 series
+
+            brew install cmake28 arm-eabi-gcc45 
+            brew unlink  cmake28
+
+    * To build for SDK2 A to P series
+
+            brew install cmake28 arm-eabi-gcc46
+            brew unlink  cmake28
+
+    * To build for SDK2 R to W series
+
+            brew install cmake30 arm-eabi-gcc49
+            brew unlink  cmake30
+
+    * To build for SDK2 X+ series
+
+            brew install cmake33 arm-eabi-gcc52
+            brew unlink  cmake33
+
 
 10. Install DVB tools
 
