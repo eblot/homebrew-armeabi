@@ -1,9 +1,9 @@
 require 'formula'
 
-class ArmEabiGdb78 <Formula
-  url 'http://ftp.gnu.org/gnu/gdb/gdb-7.8.tar.xz'
+class ArmEabiGdb <Formula
+  url 'http://ftp.gnu.org/gnu/gdb/gdb-7.10.tar.xz'
   homepage 'http://www.gnu.org/software/gdb/'
-  sha1 'fc43f1f2e651df1c69e7707130fd6864c2d7a428'
+  sha256 '7ebdaa44f9786ce0c142da4e36797d2020c55fa091905ac5af1846b5756208a8'
 
   depends_on 'gmp'
   depends_on 'mpfr'
