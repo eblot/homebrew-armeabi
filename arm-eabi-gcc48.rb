@@ -11,7 +11,7 @@ class ArmEabiGcc48 <Formula
   depends_on 'libmpc'
   depends_on 'mpfr'
   depends_on 'arm-eabi-binutils223'
-  depends_on 'gcc48' => :build
+  depends_on 'gcc49' => :build
 
   resource "newlib20" do
     url       'ftp://sourceware.org/pub/newlib/newlib-2.0.0.tar.gz'
@@ -38,11 +38,11 @@ class ArmEabiGcc48 <Formula
     libmpc = Formula.factory 'libmpc'
     libelf = Formula.factory 'libelf'
     binutils = Formula.factory armeabi
-    gcc48 = Formula.factory 'gcc48'
+    gcc49 = Formula.factory 'gcc49'
 
     # Fix up CFLAGS for cross compilation (default switches cause build issues)
-    ENV['CC'] = "#{gcc48.opt_prefix}/bin/gcc-4.8"
-    ENV['CXX'] = "#{gcc48.opt_prefix}/bin/g++-4.8"
+    ENV['CC'] = "#{gcc49.opt_prefix}/bin/gcc-4.9"
+    ENV['CXX'] = "#{gcc49.opt_prefix}/bin/g++-4.9"
     ENV['CFLAGS_FOR_BUILD'] = "-O2"
     ENV['CFLAGS'] = "-O2"
     ENV['CFLAGS_FOR_TARGET'] = "-O2"

@@ -10,11 +10,9 @@ class ArmEabiGcc46 <Formula
   depends_on 'gmp'
   depends_on 'mpfr'
   depends_on 'libmpc'
-  depends_on 'ppl011'
-  depends_on 'cloog-ppl015'
   depends_on 'libelf'
   depends_on 'arm-eabi-binutils221'
-  depends_on 'gcc48' => :build
+  depends_on 'gcc49' => :build
 
   resource "newlib19" do
     url       'ftp://sources.redhat.com/pub/newlib/newlib-1.19.0.tar.gz'
@@ -48,15 +46,13 @@ class ArmEabiGcc46 <Formula
     gmp = Formula.factory 'gmp'
     mpfr = Formula.factory 'mpfr'
     libmpc = Formula.factory 'libmpc'
-    ppl = Formula.factory 'ppl011'
-    cloogppl = Formula.factory 'cloog-ppl015'
     libelf = Formula.factory 'libelf'
     binutils = Formula.factory armeabi
-    gcc48 = Formula.factory 'gcc48'
+    gcc49 = Formula.factory 'gcc49'
 
     # Fix up CFLAGS for cross compilation (default switches cause build issues)
-    ENV['CC'] = "#{gcc48.opt_prefix}/bin/gcc-4.8"
-    ENV['CXX'] = "#{gcc48.opt_prefix}/bin/g++-4.8"
+    ENV['CC'] = "#{gcc49.opt_prefix}/bin/gcc-4.9"
+    ENV['CXX'] = "#{gcc49.opt_prefix}/bin/g++-4.9"
     ENV['CFLAGS_FOR_BUILD'] = "-O2"
     ENV['CFLAGS'] = "-O2"
     ENV['CFLAGS_FOR_TARGET'] = "-O2"
@@ -77,8 +73,6 @@ class ArmEabiGcc46 <Formula
                   "--with-gmp=#{gmp.opt_prefix}",
                   "--with-mpfr=#{mpfr.opt_prefix}",
                   "--with-mpc=#{libmpc.opt_prefix}",
-                  "--with-ppl=#{ppl.prefix}",
-                  "--with-cloog=#{cloogppl.opt_prefix}",
                   "--with-libelf=#{libelf.opt_prefix}",
                   "--with-gxx-include-dir=#{prefix}/arm-eabi/include",
                   "--disable-debug", "--disable-__cxa_atexit",
