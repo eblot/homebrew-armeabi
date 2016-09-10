@@ -1,9 +1,9 @@
 require 'formula'
 
 class ArmEabiGcc49 <Formula
-  url       'http://ftpmirror.gnu.org/gcc/gcc-4.9.1/gcc-4.9.1.tar.bz2'
-  homepage  'http://gcc.gnu.org/'
-  sha1      '3f303f403053f0ce79530dae832811ecef91197e'
+  url 'http://ftpmirror.gnu.org/gcc/gcc-4.9.1/gcc-4.9.1.tar.bz2'
+  homepage 'http://gcc.gnu.org/'
+  sha256 'd334781a124ada6f38e63b545e2a3b8c2183049515a1abab6d513f109f1d717e'
 
   keg_only 'Enable installation of several GCC versions'
 
@@ -14,8 +14,8 @@ class ArmEabiGcc49 <Formula
   depends_on 'gcc49' => :build
 
   resource "newlib21" do
-    url       'ftp://sourceware.org/pub/newlib/newlib-2.1.0.tar.gz'
-    sha1      '364d569771866bf55cdbd1f8c4a6fa5c9cf2ef6c'
+    url 'ftp://sourceware.org/pub/newlib/newlib-2.1.0.tar.gz'
+    sha256 '3e4d5ab9f0508942b6231b8ade4f8e5048cf92c96ed574c2bd6bd3320a599a48'
   end
 
 

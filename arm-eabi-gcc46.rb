@@ -1,9 +1,9 @@
 require 'formula'
 
 class ArmEabiGcc46 <Formula
-  url       'http://ftpmirror.gnu.org/gcc/gcc-4.6.4/gcc-core-4.6.4.tar.bz2'
-  homepage  'http://gcc.gnu.org/'
-  sha1      '9b2f25ac248d81c97bbe46690dc2c350e51996a5'
+  url 'http://ftpmirror.gnu.org/gcc/gcc-4.6.4/gcc-core-4.6.4.tar.bz2'
+  homepage 'http://gcc.gnu.org/'
+  sha256 '48b566f1288f099dff8fba868499a320f83586245ec69b8c82a9042566a5bf62'
 
   keg_only 'Enable installation of several GCC versions'
 
@@ -15,13 +15,13 @@ class ArmEabiGcc46 <Formula
   depends_on 'gcc49' => :build
 
   resource "newlib19" do
-    url       'ftp://sources.redhat.com/pub/newlib/newlib-1.19.0.tar.gz'
-    sha1      'b2269d30ce7b93b7c714b90ef2f40221c2df0fcd'
+    url 'ftp://sources.redhat.com/pub/newlib/newlib-1.19.0.tar.gz'
+    sha256 '4f43807236b2274c220881ca69f7dc6aecc52f14bb32a6f03404d30780c25007'
   end
 
   resource "gpp46" do
-    url       'http://ftpmirror.gnu.org/gcc/gcc-4.6.4/gcc-g++-4.6.4.tar.bz2'
-    sha1      'e9a47df1bc5e39a9ef995484c315f5d47114daeb'
+    url 'http://ftpmirror.gnu.org/gcc/gcc-4.6.4/gcc-g++-4.6.4.tar.bz2'
+    sha256 '4eaa347f9cd3ab7d5e14efbb9c5c03009229cd714b558fc55fa56e8996b74d42'
   end
 
   def patches

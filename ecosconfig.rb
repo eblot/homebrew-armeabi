@@ -4,7 +4,6 @@ class Ecosconfig < Formula
   homepage 'https://github.com/eblot/ecos'
   url 'https://github.com/eblot/ecos.git'
   version '3.10'
-  sha1 ''
 
   def install
 

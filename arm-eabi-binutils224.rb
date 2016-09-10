@@ -3,7 +3,7 @@ require 'formula'
 class ArmEabiBinutils224 <Formula
   url 'http://ftp.gnu.org/gnu/binutils/binutils-2.24.tar.bz2'
   homepage 'http://www.gnu.org/software/binutils/'
-  sha1 '7ac75404ddb3c4910c7594b51ddfc76d4693debb'
+  sha256 'e5e8c5be9664e7f7f96e0d09919110ab5ad597794f5b1809871177a0f0f14137'
 
   keg_only 'Enable installation of several binutils versions'
 

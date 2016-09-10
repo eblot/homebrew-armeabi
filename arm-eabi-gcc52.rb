@@ -2,9 +2,9 @@ require 'formula'
 
 class ArmEabiGcc52 <Formula
   homepage 'https://gcc.gnu.org'
-  url      'http://ftpmirror.gnu.org/gcc/gcc-5.2.0/gcc-5.2.0.tar.bz2'
-  mirror   'https://ftp.gnu.org/gnu/gcc/gcc-5.2.0/gcc-5.2.0.tar.bz2'
-  sha256   '5f835b04b5f7dd4f4d2dc96190ec1621b8d89f2dc6f638f9f8bc1b1014ba8cad'
+  url 'http://ftpmirror.gnu.org/gcc/gcc-5.2.0/gcc-5.2.0.tar.bz2'
+  mirror 'https://ftp.gnu.org/gnu/gcc/gcc-5.2.0/gcc-5.2.0.tar.bz2'
+  sha256 '5f835b04b5f7dd4f4d2dc96190ec1621b8d89f2dc6f638f9f8bc1b1014ba8cad'
 
   keg_only 'Enable installation of several GCC versions'
 
@@ -16,7 +16,7 @@ class ArmEabiGcc52 <Formula
   depends_on 'gcc5' => :build
 
   resource 'newlib22' do
-    url    'ftp://sourceware.org/pub/newlib/newlib-2.2.0.20150623.tar.gz'
+    url 'ftp://sourceware.org/pub/newlib/newlib-2.2.0.20150623.tar.gz'
     sha256 'b938fa06f61cc54b52cdc1e049982cc2624e6b4301feaf2cbe3a47ca610a7e86'
   end
 

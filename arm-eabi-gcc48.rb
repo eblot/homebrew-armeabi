@@ -1,9 +1,9 @@
 require 'formula'
 
 class ArmEabiGcc48 <Formula
-  url       'http://ftpmirror.gnu.org/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2'
-  homepage  'http://gcc.gnu.org/'
-  sha1      '810fb70bd721e1d9f446b6503afe0a9088b62986'
+  url 'http://ftpmirror.gnu.org/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2'
+  homepage 'http://gcc.gnu.org/'
+  sha256 '09dc2276c73424bbbfda1dbddc62bbbf900c9f185acf7f3e1d773ce2d7e3cdc8'
 
   keg_only 'Enable installation of several GCC versions'
 
@@ -14,8 +14,8 @@ class ArmEabiGcc48 <Formula
   depends_on 'gcc49' => :build
 
   resource "newlib20" do
-    url       'ftp://sourceware.org/pub/newlib/newlib-2.0.0.tar.gz'
-    sha1      'ea6b5727162453284791869e905f39fb8fab8d3f'
+    url 'ftp://sourceware.org/pub/newlib/newlib-2.0.0.tar.gz'
+    sha256 '49c29e9129325e7c3b221aa829743ddcd796d024440e47c80fc0d6769af72d8a'
   end
 
   def patches
