@@ -1,17 +1,15 @@
 require 'formula'
 
-class Armv6mNoneEabiBinutils227 <Formula
-  url 'http://ftp.gnu.org/gnu/binutils/binutils-2.27.tar.bz2'
+class Armv7emNoneEabiBinutils228 <Formula
+  url 'http://ftp.gnu.org/gnu/binutils/binutils-2.28.tar.bz2'
   homepage 'http://www.gnu.org/software/binutils/'
-  sha256 '369737ce51587f92466041a97ab7d2358c6d9e1b6490b3940eb09fb0a9a6ac88'
-
-  keg_only 'Enable installation of several binutils versions'
+  sha256 '6297433ee120b11b4b0a1c8f3512d7d73501753142ab9e2daa13c5a3edd32a72'
 
   depends_on 'gmp'
   depends_on 'mpfr'
 
   def install
-    system "./configure", "--prefix=#{prefix}", "--target=armv6m-none-eabi",
+    system "./configure", "--prefix=#{prefix}", "--target=armv7em-none-eabi",
                 "--disable-shared", "--disable-nls",
                 "--with-gmp=#{Formulary.factory('gmp').prefix}",
                 "--with-mpfr=#{Formulary.factory('mpfr').prefix}",
