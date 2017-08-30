@@ -31,24 +31,28 @@ class NrfSysCall(object):
         self._calls = OrderedDict()
 
     def parse(self, fp):
-        for nl, line in enumerate(fp, start=1):
-            line = line.strip()
-            if self.MKCRE.match(line):
-                # do not account for already upgraded files
-                return 0
-            mo = self.SVCRE.match(line)
-            if mo:
-                num = mo.group('num')
-                if num in self._calls:
-                    raise ValueError('Redefinition of %s @ line %d' %
-                                     (num, nl))
-                args = tuple(arg.strip()
-                             for arg in mo.group('args').split(','))
-                self._calls[num] = self.FUNC(mo.group('rtype'),
-                                             mo.group('name'),
-                                             args,
-                                             nl)
-        return len(self._calls)
+        try:
+            for nl, line in enumerate(fp, start=1):
+                line = line.strip()
+                if self.MKCRE.match(line):
+                    # do not account for already upgraded files
+                    return 0
+                mo = self.SVCRE.match(line)
+                if mo:
+                    num = mo.group('num')
+                    if num in self._calls:
+                        raise ValueError('Redefinition of %s @ line %d' %
+                                         (num, nl))
+                    args = tuple(arg.strip()
+                                 for arg in mo.group('args').split(','))
+                    self._calls[num] = self.FUNC(mo.group('rtype'),
+                                                 mo.group('name'),
+                                                 args,
+                                                 nl)
+            return len(self._calls)
+        except Exception as ex:
+            print('Cannot parse %s: %s' % (fp.name, str(ex)), file=stderr)
+            return 0
 
     def generate(self, fp, **kwargs):
         self._generate_header(fp, **kwargs)
