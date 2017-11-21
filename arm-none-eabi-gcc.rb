@@ -4,18 +4,19 @@ class ArmNoneEabiGcc <Formula
   homepage 'https://gcc.gnu.org'
   url 'http://ftpmirror.gnu.org/gcc/gcc-7.2.0/gcc-7.2.0.tar.xz'
   mirror 'http://fr.mirror.babylon.network/gcc/releases/gcc-7.2.0/gcc-7.2.0.tar.xz'
-  sha256 '5f835b04b5f7dd4f4d2dc96190ec1621b8d89f2dc6f638f9f8bc1b1014ba8cad'
+  sha256 '1cf7adf8ff4b5aa49041c8734bbcf1ad18cc4c94d0029aae0f4e48841088479a'
 
   depends_on 'gmp'
-  depends_on 'libmpc'
   depends_on 'mpfr'
-  depends_on 'isl014'
+  depends_on 'isl'
+  depends_on 'libmpc'
+  depends_on 'libelf'
   depends_on 'arm-none-eabi-binutils'
   depends_on 'gcc' => :build
 
-  resource 'newlib22' do
-    url 'ftp://sourceware.org/pub/newlib/newlib-2.2.0.20150623.tar.gz'
-    sha256 'b938fa06f61cc54b52cdc1e049982cc2624e6b4301feaf2cbe3a47ca610a7e86'
+  resource 'newlib' do
+    url 'https://github.com/eblot/newlib-cygwin.git',
+        :using => :git, :branch => 'clang-armeabi-20170818'
   end
 
   def install
@@ -24,22 +25,22 @@ class ArmNoneEabiGcc <Formula
 
     coredir = Dir.pwd
 
-    resource('newlib22').stage do
+    resource('newlib').stage do
       system 'ditto', Dir.pwd+'/libgloss', coredir+'/libgloss'
       system 'ditto', Dir.pwd+'/newlib', coredir+'/newlib'
     end
 
-    gmp = Formula.factory 'gmp'
-    mpfr = Formula.factory 'mpfr'
-    libmpc = Formula.factory 'libmpc'
-    libelf = Formula.factory 'libelf'
-    isl014 = Formula.factory 'isl014'
-    binutils = Formula.factory armnoneeabi
-    gcc = Formula.factory 'gcc'
+    gmp = Formulary.factory 'gmp'
+    mpfr = Formulary.factory 'mpfr'
+    libmpc = Formulary.factory 'libmpc'
+    libelf = Formulary.factory 'libelf'
+    isl = Formulary.factory 'isl'
+    binutils = Formulary.factory armnoneeabi
+    gcc = Formulary.factory 'gcc'
 
     # Fix up CFLAGS for cross compilation (default switches cause build issues)
-    ENV['CC'] = "#{gcc.opt_prefix}/bin/gcc"
-    ENV['CXX'] = "#{gcc.opt_prefix}/bin/g++"
+    ENV['CC'] = "#{gcc.opt_prefix}/bin/gcc-?"
+    ENV['CXX'] = "#{gcc.opt_prefix}/bin/g++-?"
     ENV['CFLAGS_FOR_BUILD'] = "-O2"
     ENV['CFLAGS'] = "-O2"
     ENV['CFLAGS_FOR_TARGET'] = "-O2"
@@ -60,18 +61,17 @@ class ArmNoneEabiGcc <Formula
                   "--with-gmp=#{gmp.opt_prefix}",
                   "--with-mpfr=#{mpfr.opt_prefix}",
                   "--with-mpc=#{libmpc.opt_prefix}",
-                  "--with-isl=#{isl014.opt_prefix}",
+                  "--with-isl=#{isl.opt_prefix}",
                   "--with-libelf=#{libelf.opt_prefix}",
                   "--with-gxx-include-dir=#{prefix}/arm-none-eabi/include",
-                  "--disable-debug", "--disable-__cxa_atexit",
-                  "--with-pkgversion=SDK2-Xharlion"
+                  "--disable-debug", "--disable-__cxa_atexit"
       # Temp. workaround until GCC installation script is fixed
       system "mkdir -p #{prefix}/arm-none-eabi/lib/fpu/interwork"
       system "make"
       system "make -j1 -k install"
     end
 
-    ln_s "#{Formula.factory(armeabi).prefix}/arm-none-eabi/bin",
+    ln_s "#{Formulary.factory(armnoneeabi).prefix}/arm-none-eabi/bin",
                    "#{prefix}/arm-none-eabi/bin"
   end
 end
