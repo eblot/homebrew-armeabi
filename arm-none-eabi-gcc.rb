@@ -1,19 +1,17 @@
 require 'formula'
 
-class ArmEabiGcc52 <Formula
+class ArmNoneEabiGcc <Formula
   homepage 'https://gcc.gnu.org'
-  url 'http://ftpmirror.gnu.org/gcc/gcc-5.2.0/gcc-5.2.0.tar.bz2'
-  mirror 'https://ftp.gnu.org/gnu/gcc/gcc-5.2.0/gcc-5.2.0.tar.bz2'
+  url 'http://ftpmirror.gnu.org/gcc/gcc-7.2.0/gcc-7.2.0.tar.xz'
+  mirror 'http://fr.mirror.babylon.network/gcc/releases/gcc-7.2.0/gcc-7.2.0.tar.xz'
   sha256 '5f835b04b5f7dd4f4d2dc96190ec1621b8d89f2dc6f638f9f8bc1b1014ba8cad'
-
-  keg_only 'Enable installation of several GCC versions'
 
   depends_on 'gmp'
   depends_on 'libmpc'
   depends_on 'mpfr'
   depends_on 'isl014'
-  depends_on 'arm-eabi-binutils225'
-  depends_on 'gcc5' => :build
+  depends_on 'arm-none-eabi-binutils'
+  depends_on 'gcc' => :build
 
   resource 'newlib22' do
     url 'ftp://sourceware.org/pub/newlib/newlib-2.2.0.20150623.tar.gz'
@@ -22,7 +20,7 @@ class ArmEabiGcc52 <Formula
 
   def install
 
-    armeabi = 'arm-eabi-binutils225'
+    armnoneeabi = 'arm-none-eabi-binutils'
 
     coredir = Dir.pwd
 
@@ -36,12 +34,12 @@ class ArmEabiGcc52 <Formula
     libmpc = Formula.factory 'libmpc'
     libelf = Formula.factory 'libelf'
     isl014 = Formula.factory 'isl014'
-    binutils = Formula.factory armeabi
-    gcc5 = Formula.factory 'gcc5'
+    binutils = Formula.factory armnoneeabi
+    gcc = Formula.factory 'gcc'
 
     # Fix up CFLAGS for cross compilation (default switches cause build issues)
-    ENV['CC'] = "#{gcc5.opt_prefix}/bin/gcc-5"
-    ENV['CXX'] = "#{gcc5.opt_prefix}/bin/g++-5"
+    ENV['CC'] = "#{gcc.opt_prefix}/bin/gcc"
+    ENV['CXX'] = "#{gcc.opt_prefix}/bin/g++"
     ENV['CFLAGS_FOR_BUILD'] = "-O2"
     ENV['CFLAGS'] = "-O2"
     ENV['CFLAGS_FOR_TARGET'] = "-O2"
@@ -52,7 +50,7 @@ class ArmEabiGcc52 <Formula
     build_dir='build'
     mkdir build_dir
     Dir.chdir build_dir do
-      system coredir+"/configure", "--prefix=#{prefix}", "--target=arm-eabi",
+      system coredir+"/configure", "--prefix=#{prefix}", "--target=arm-none-eabi",
                   "--disable-shared", "--with-gnu-as", "--with-gnu-ld",
                   "--with-newlib", "--enable-softfloat", "--disable-bigendian",
                   "--disable-fpu", "--disable-underscore", "--enable-multilibs",
@@ -64,16 +62,17 @@ class ArmEabiGcc52 <Formula
                   "--with-mpc=#{libmpc.opt_prefix}",
                   "--with-isl=#{isl014.opt_prefix}",
                   "--with-libelf=#{libelf.opt_prefix}",
-                  "--with-gxx-include-dir=#{prefix}/arm-eabi/include",
+                  "--with-gxx-include-dir=#{prefix}/arm-none-eabi/include",
                   "--disable-debug", "--disable-__cxa_atexit",
                   "--with-pkgversion=SDK2-Xharlion"
       # Temp. workaround until GCC installation script is fixed
-      system "mkdir -p #{prefix}/arm-eabi/lib/fpu/interwork"
+      system "mkdir -p #{prefix}/arm-none-eabi/lib/fpu/interwork"
       system "make"
       system "make -j1 -k install"
     end
 
-    ln_s "#{Formula.factory(armeabi).prefix}/arm-eabi/bin",
-                   "#{prefix}/arm-eabi/bin"
+    ln_s "#{Formula.factory(armeabi).prefix}/arm-none-eabi/bin",
+                   "#{prefix}/arm-none-eabi/bin"
   end
 end
+
