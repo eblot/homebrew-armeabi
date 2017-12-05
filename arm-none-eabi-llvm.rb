@@ -21,11 +21,6 @@ class ArmNoneEabiLlvm < Formula
       sha256 "87d078b959c4a6e5ff9fd137c2f477cadb1245f93812512996f73986a6d973c6"
     end
 
-    resource "compiler-rt" do
-      url "https://releases.llvm.org/5.0.0/compiler-rt-5.0.0.src.tar.xz"
-      sha256 "d5ad5266462134a482b381f1f8115b6cad3473741b3bb7d1acc7f69fd0f0c0b3"
-    end
-
     resource "lld" do
       url "https://releases.llvm.org/5.0.0/lld-5.0.0.src.tar.xz"
       sha256 "399a7920a5278d42c46a7bf7e4191820ec2301457a7d0d4fcc9a4ac05dd53897"
@@ -46,7 +41,6 @@ class ArmNoneEabiLlvm < Formula
     (buildpath/"tools/clang").install resource("clang")
     (buildpath/"tools/clang/tools/extra").install resource("clang-extra-tools")
     (buildpath/"tools/lld").install resource("lld")
-    (buildpath/"projects/compiler-rt").install resource("compiler-rt")
 
     resource("armv7em_arch_fix").stage do
       system "patch", "-p0", "-i", Pathname.pwd/"armv7em_arch_fix.diff", "-d", buildpath/""
@@ -70,6 +64,5 @@ class ArmNoneEabiLlvm < Formula
       system "cmake", "--build", ".", "--target", "install"
     end
 
-    system "exit" "1"
   end
 end
