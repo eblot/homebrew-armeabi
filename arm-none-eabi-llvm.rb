@@ -27,8 +27,24 @@ class ArmNoneEabiLlvm < Formula
     end
 
     resource "armv_lld_fix" do
-       url "https://gist.githubusercontent.com/eblot/1dee142c537f2e5ee22b615ee896ca67/raw/271b5dcf4966be206095cb6628626db5cfbf47bb/lld.diff"
-       sha256 "1f37482a0991fb79c6e07702aae7e82c0b0b1a9f4d4a36cf6f96ed2213c7a9b3"
+      url "https://gist.githubusercontent.com/eblot/1dee142c537f2e5ee22b615ee896ca67/raw/271b5dcf4966be206095cb6628626db5cfbf47bb/lld.diff"
+      sha256 "1f37482a0991fb79c6e07702aae7e82c0b0b1a9f4d4a36cf6f96ed2213c7a9b3"
+    end
+  end
+
+  head do
+    url "http://llvm.org/svn/llvm-project/llvm/trunk", :using => :svn
+
+    resource "clang" do
+      url "http://llvm.org/svn/llvm-project/cfe/trunk", :using => :svn
+    end
+
+    resource "clang-extra-tools" do
+      url "http://llvm.org/svn/llvm-project/clang-tools-extra/trunk", :using => :svn
+    end
+
+    resource "lld" do
+      url "http://llvm.org/svn/llvm-project/lld/trunk", :using => :svn
     end
   end
 
@@ -41,14 +57,6 @@ class ArmNoneEabiLlvm < Formula
     (buildpath/"tools/clang").install resource("clang")
     (buildpath/"tools/clang/tools/extra").install resource("clang-extra-tools")
     (buildpath/"tools/lld").install resource("lld")
-
-    resource("armv7em_arch_fix").stage do
-      system "patch", "-p0", "-i", Pathname.pwd/"armv7em_arch_fix.diff", "-d", buildpath/""
-    end
-
-    resource("armv_lld_fix").stage do
-      system "patch", "-p0", "-i", Pathname.pwd/"lld.diff", "-d", buildpath/"tools/lld"
-    end
 
     args = %w[
       -DCMAKE_BUILD_TYPE=Release
