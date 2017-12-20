@@ -46,6 +46,11 @@ class ArmNoneEabiLlvm < Formula
     resource "lld" do
       url "http://llvm.org/svn/llvm-project/lld/trunk", :using => :svn
     end
+
+    resource "lma_ldd_fix" do
+      url "https://reviews.llvm.org/file/data/pplww4hofviyh6ykvk3w/PHID-FILE-4lzqvvnt4m4ufwxmj2o2/D41397.diff"
+      sha256 "fac96b2bfde05b83578bcadf5d963fc238e2ab239ae58c69d8709a42bc246541"
+    end
   end
 
   keg_only "conflict with system llvm"
@@ -57,6 +62,19 @@ class ArmNoneEabiLlvm < Formula
     (buildpath/"tools/clang").install resource("clang")
     (buildpath/"tools/clang/tools/extra").install resource("clang-extra-tools")
     (buildpath/"tools/lld").install resource("lld")
+
+    if build.head?
+      resource("lma_ldd_fix").stage do
+        system "patch", "-p0", "-i", Pathname.pwd/"D41397.diff", "-d", buildpath/"tools/lld"
+      end
+    else
+      resource("armv7em_arch_fix").stage do
+         system "patch", "-p0", "-i", Pathname.pwd/"armv7em_arch_fix.diff", "-d", buildpath/""
+      end
+      resource("armv_lld_fix").stage do
+        system "patch", "-p0", "-i", Pathname.pwd/"lld.diff", "-d", buildpath/"tools/lld"
+      end
+    end
 
     args = %w[
       -DCMAKE_BUILD_TYPE=Release
