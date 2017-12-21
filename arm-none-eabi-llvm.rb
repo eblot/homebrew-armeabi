@@ -3,8 +3,8 @@ class ArmNoneEabiLlvm < Formula
   homepage "https://llvm.org/"
 
   stable do
-    url "https://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz"
-    sha256 "e35dcbae6084adcf4abb32514127c5eabd7d63b733852ccdb31e06f1373136da"
+    url "https://releases.llvm.org/5.0.1/llvm-5.0.1.src.tar.xz"
+    sha256 "5fa7489fc0225b11821cab0362f5813a05f2bcf2533e8a4ea9c9c860168807b0"
 
     resource "armv7em_arch_fix" do
       url "https://gist.githubusercontent.com/eblot/84e6ce98ee9e81a580ef9bbcd5ab0c6e/raw/2f85e4266ff29fa4e2313ab4f5acf71134901a6f/armv7em_arch_fix.diff"
@@ -12,18 +12,18 @@ class ArmNoneEabiLlvm < Formula
     end
 
     resource "clang" do
-      url "https://releases.llvm.org/5.0.0/cfe-5.0.0.src.tar.xz"
-      sha256 "019f23c2192df793ac746595e94a403908749f8e0c484b403476d2611dd20970"
+      url "https://releases.llvm.org/5.0.1/cfe-5.0.1.src.tar.xz"
+      sha256 "135f6c9b0cd2da1aff2250e065946258eb699777888df39ca5a5b4fe5e23d0ff"
     end
 
     resource "clang-extra-tools" do
-      url "https://releases.llvm.org/5.0.0/clang-tools-extra-5.0.0.src.tar.xz"
-      sha256 "87d078b959c4a6e5ff9fd137c2f477cadb1245f93812512996f73986a6d973c6"
+      url "https://releases.llvm.org/5.0.1/clang-tools-extra-5.0.1.src.tar.xz"
+      sha256 "9aada1f9d673226846c3399d13fab6bba4bfd38bcfe8def5ee7b0ec24f8cd225"
     end
 
     resource "lld" do
-      url "https://releases.llvm.org/5.0.0/lld-5.0.0.src.tar.xz"
-      sha256 "399a7920a5278d42c46a7bf7e4191820ec2301457a7d0d4fcc9a4ac05dd53897"
+      url "https://releases.llvm.org/5.0.1/lld-5.0.1.src.tar.xz"
+      sha256 "d5b36c0005824f07ab093616bdff247f3da817cae2c51371e1d1473af717d895"
     end
 
     resource "armv_lld_fix" do
@@ -48,8 +48,8 @@ class ArmNoneEabiLlvm < Formula
     end
 
     resource "lma_ldd_fix" do
-      url "https://reviews.llvm.org/file/data/pplww4hofviyh6ykvk3w/PHID-FILE-4lzqvvnt4m4ufwxmj2o2/D41397.diff"
-      sha256 "fac96b2bfde05b83578bcadf5d963fc238e2ab239ae58c69d8709a42bc246541"
+      url "https://reviews.llvm.org/file/data/rgtecrvjuztcqezli7nj/PHID-FILE-sf4pe2wndw23h6o7dnlg/D41397.id127854.diff"
+      sha256 "a2310c441e240dcfd435c9b890445616fbd6bd52a5232d555b6cab538a4082dd"
     end
   end
 
@@ -65,7 +65,7 @@ class ArmNoneEabiLlvm < Formula
 
     if build.head?
       resource("lma_ldd_fix").stage do
-        system "patch", "-p0", "-i", Pathname.pwd/"D41397.diff", "-d", buildpath/"tools/lld"
+        system "patch", "-p0", "-i", Pathname.pwd/"D41397.id127854.diff", "-d", buildpath/"tools/lld"
       end
     else
       resource("armv7em_arch_fix").stage do
