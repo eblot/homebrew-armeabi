@@ -1,5 +1,5 @@
-class Armv7emCortexM4 < Formula
-  desc "Newlib & compiler runtime for baremetal Cortex-M4 targets"
+class Armv6mCortexM0plus < Formula
+  desc "Newlib & compiler runtime for baremetal Cortex-M0 targets"
   homepage "https://sourceware.org/newlib/"
   # and homepage "http://compiler-rt.llvm.org/"
 
@@ -38,7 +38,7 @@ class Armv7emCortexM4 < Formula
     ENV['NM_FOR_TARGET']="#{llvm.opt_prefix}/bin/llvm-nm"
     ENV['RANLIB_FOR_TARGET']="#{llvm.opt_prefix}/bin/llvm-ranlib"
     ENV['READELF_FOR_TARGET']="#{llvm.opt_prefix}/bin/llvm-readelf"
-    ENV['CFLAGS_FOR_TARGET']="-target armv7em-none-eabi -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -mabi=aapcs -g -O3 -ffunction-sections -fdata-sections -Wno-unused-command-line-argument"
+    ENV['CFLAGS_FOR_TARGET']="-target armv6m-none-eabi -mcpu=cortex-m0plus -mfloat-abi=soft -mthumb -mabi=aapcs -g -O3 -ffunction-sections -fdata-sections -Wno-unused-command-line-argument"
     ENV['AS_FOR_TARGET']="#{llvm.opt_prefix}/bin/clang"
 
     host=`cc -dumpmachine`.strip
@@ -47,8 +47,8 @@ class Armv7emCortexM4 < Formula
       system buildpath/"newlib/configure",
                 "--host=#{host}",
                 "--build=#{host}",
-                "--target=armv7em-none-eabi",
-                "--prefix=#{prefix}/armv7em-none-eabi/cortex-m4",
+                "--target=armv6m-none-eabi",
+                "--prefix=#{prefix}/armv6m-none-eabi/cortex-m0plus",
                 "--disable-newlib-supplied-syscalls",
                 "--enable-newlib-reent-small",
                 "--disable-newlib-fvwrite-in-streamio",
@@ -62,8 +62,8 @@ class Armv7emCortexM4 < Formula
                 "--disable-nls"
       system "make"
       system "make -j1 install; true"
-      system "mv #{prefix}/armv7em-none-eabi/cortex-m4/armv7em-none-eabi/* #{prefix}/armv7em-none-eabi/cortex-m4/"
-      system "rm -rf #{prefix}/armv7em-none-eabi/cortex-m4/armv7em-none-eabi"
+      system "mv #{prefix}/armv6m-none-eabi/cortex-m0plus/armv6m-none-eabi/* #{prefix}/armv6m-none-eabi/cortex-m0plus/"
+      system "rm -rf #{prefix}/armv6m-none-eabi/cortex-m0plus/armv6m-none-eabi"
     end
 
     mktemp do
@@ -73,14 +73,14 @@ class Armv7emCortexM4 < Formula
       cp "#{buildpath}/CMakeLists.txt", "#{buildpath}/compiler-rt/cortex-m/CMakeLists.txt"
       system "cmake",
                 "-G", "Ninja",
-                "-DXTARGET=armv7em-none-eabi",
-                "-DXCPU=cortex-m4",
-                "-DXCPUDIR=cortex-m4",
+                "-DXTARGET=armv6m-none-eabi",
+                "-DXCPU=cortex-m0plus",
+                "-DXCPUDIR=cortex-m0plus",
                 "-DXCFLAGS=-mfloat-abi=soft",
-                "-DXNEWLIB=#{prefix}/armv7em-none-eabi/cortex-m4",
+                "-DXNEWLIB=#{prefix}/armv6m-none-eabi/cortex-m0plus",
                  buildpath/"compiler-rt/cortex-m"
       system "ninja"
-      system "cp libcompiler_rt.a #{prefix}/armv7em-none-eabi/cortex-m4/lib/"
+      system "cp libcompiler_rt.a #{prefix}/armv6m-none-eabi/cortex-m0plus/lib/"
     end
   end
 
