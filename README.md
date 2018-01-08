@@ -1,82 +1,32 @@
-Homebrew-ArmEabi
-================
+# Homebrew-ArmEabi
 
-Homebrew tap for ARM EABI toolchain, dedicated to eCos RTOS
+Homebrew tap for ARM EABI toolchain, dedicated to build baremetal ARM Cortex-M
+applications from a macOS host.
 
-Installation quick guide
-------------------------
+These toolchains have been used to build eCos-based application and bootloaders,
+and are now used to build applications for Nordik nRF52 BLE applications, 
+ST STM32L0 and STM32L4 baremetal and ChibiOS applications.
 
-1. Install XCode 6.1 (or above) and starts it once to agree with the end user
-   license
+## Installation
 
-2. Install the XCode command line tools
+ * Install [Homebrew](https://brew.sh)
+ * Execute `brew tap eblot/armeabi`
+ * Install the package you need, *e.g.*
+    `brew install arm-none-eabi-llvm`
 
-        sudo xcode-select --install
+## Available recipes
 
-3. Clean up your current PATH
-
-        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-
-4. Download and install Homebrew from brew.sh
-
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-   Brew have already updated the installation URL in the past. In the event of
-   an installation failure due to an invalid URL, please check out the official
-   web site to retrieve the updated URL, from http://brew.sh/#install
-
-5. Test your Homebrew installation, and report errors if any
-
-        brew doctor
-
-6. Install the default required packages
-
-        brew install dash gettext git ninja pkg-config readline openssl subversion wget xz
-
-7. Add the required Homebrew tap (for versioned tools)
-
-        brew tap homebrew/versions
-        brew tap eblot/armeabi
-        brew tap eblot/dvb
-        brew tap eblot/devtools
-
-8. Install toolchains (and their dependencies)
-   Reject all requests to install 'javac', you do not need it.
-
-    * All SDKs
-
-            brew install ecosconfig arm-eabi-gdb
-            brew install sdk-script sbx-script
-
-    * To build for all SDK1 series
-
-            brew install cmake28 arm-eabi-gcc45
-            brew unlink  cmake28
-
-    * To build for SDK2 A to P series
-
-            brew install cmake28 arm-eabi-gcc46
-            brew unlink  cmake28
-
-    * To build for SDK2 R to W series
-
-            brew install cmake30 arm-eabi-gcc49
-            brew unlink  cmake30
-
-    * To build for SDK2 X+ series
-
-            brew install cmake33 arm-eabi-gcc52
-            brew unlink  cmake33
-
-
-9. Install DVB tools
-
-        brew install redbutton-author opencaster dvbsnoop
-
-10. Do not forget to move back the files and directories that you may want to
-    keep from a previous installation, i.e. from `/usr/local-prev` to `/usr/local`.
-
-11. Take some time to clean up your `~/.bashrc` file that you may have
-    customized with a previous installation. You should not need to define
-    any `HOMEBREW`* environment variable(s).
-
+ * GNU BinUtils (Assembler, Linker, Tools): `arm-none-eabi-binutils.rb`
+ * GNU C compiler: `arm-none-eabi-gcc.rb`
+ * GNU Debugger: `arm-none-eabi-gdb.rb`
+ * Clang/LLVM toolchain: `arm-none-eabi-llvm.rb`
+   * This toolchain does not require any of the GNU tools, as it comes with
+     an integrated asssembler and linker. Note that the linker does not support
+     complex `target.ld` scripts with the stable 5.0 version. However the
+     development version now supports most of the common script syntax.
+   * Support the `--HEAD` option to install the development version of LLVM
+ * C library (newlib) and compiler runtime for Cortex-M4 targets `armv7em-cortex-m4.rb`
+ * C library (newlib) and compiler runtime for Cortex-M4 FPU targets `armv7em-cortex-m4f.rb`
+ * CramFS tools to build/check CramFS volume: `cramfs.rb`
+ * eCos configuration tool: `ecosconfig.rb`
+ * nRF52 script to fix Nordik SDK supervisor calls: `nrfsvc.py`
