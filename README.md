@@ -25,8 +25,10 @@ ST STM32L0 and STM32L4 baremetal and ChibiOS applications.
      complex `target.ld` scripts with the stable 5.0 version. However the
      development version now supports most of the common script syntax.
    * Support the `--HEAD` option to install the development version of LLVM
- * C library (newlib) and compiler runtime for Cortex-M4 targets `armv7em-cortex-m4.rb`
- * C library (newlib) and compiler runtime for Cortex-M4 FPU targets `armv7em-cortex-m4f.rb`
+ * C library (newlib) and compiler runtime for various targets: 
+    * Cortex-M4: `armv7em-cortex-m4.rb`
+    * Cortex-M4 w/ FPU: `armv7em-cortex-m4f.rb`
+    * Cortex-M0+: `armv6m-cortex-m0plus.rb`
  * CramFS tools to build/check CramFS volume: `cramfs.rb`
  * eCos configuration tool: `ecosconfig.rb`
  * nRF52 script to fix Nordik SDK supervisor calls: `nrfsvc.py`
