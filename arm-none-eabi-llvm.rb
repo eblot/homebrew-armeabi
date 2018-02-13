@@ -6,7 +6,7 @@ class ArmNoneEabiLlvm < Formula
     url "https://releases.llvm.org/5.0.1/llvm-5.0.1.src.tar.xz"
     sha256 "5fa7489fc0225b11821cab0362f5813a05f2bcf2533e8a4ea9c9c860168807b0"
 
-    resource "armv7em_arch_fix" do
+    patch "armv7em_arch_fix" do
       url "https://gist.githubusercontent.com/eblot/84e6ce98ee9e81a580ef9bbcd5ab0c6e/raw/2f85e4266ff29fa4e2313ab4f5acf71134901a6f/armv7em_arch_fix.diff"
       sha256 "113c2ec243960ff111d5962a5d61371ccd4411a0a1e53759f97d2ca594906dff"
     end
@@ -24,33 +24,36 @@ class ArmNoneEabiLlvm < Formula
     resource "lld" do
       url "https://releases.llvm.org/5.0.1/lld-5.0.1.src.tar.xz"
       sha256 "d5b36c0005824f07ab093616bdff247f3da817cae2c51371e1d1473af717d895"
+
+      patch do
+        url "https://gist.githubusercontent.com/eblot/1dee142c537f2e5ee22b615ee896ca67/raw/271b5dcf4966be206095cb6628626db5cfbf47bb/lld.diff"
+        sha256 "1f37482a0991fb79c6e07702aae7e82c0b0b1a9f4d4a36cf6f96ed2213c7a9b3"
+      end
     end
 
-    resource "armv_lld_fix" do
-      url "https://gist.githubusercontent.com/eblot/1dee142c537f2e5ee22b615ee896ca67/raw/271b5dcf4966be206095cb6628626db5cfbf47bb/lld.diff"
-      sha256 "1f37482a0991fb79c6e07702aae7e82c0b0b1a9f4d4a36cf6f96ed2213c7a9b3"
-    end
   end
 
   head do
-    url "http://llvm.org/svn/llvm-project/llvm/trunk", :using => :svn
+    url "http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_600/rc2", :using => :svn
 
     resource "clang" do
-      url "http://llvm.org/svn/llvm-project/cfe/trunk", :using => :svn
+      url "http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_600/rc2", :using => :svn
     end
 
     resource "clang-extra-tools" do
-      url "http://llvm.org/svn/llvm-project/clang-tools-extra/trunk", :using => :svn
+      url "http://llvm.org/svn/llvm-project/clang-tools-extra/tags/RELEASE_600/rc2", :using => :svn
     end
 
     resource "lld" do
-      url "http://llvm.org/svn/llvm-project/lld/trunk", :using => :svn
+      url "http://llvm.org/svn/llvm-project/lld/tags/RELEASE_600/rc2", :using => :svn
+
+      patch :p0 do
+        url "https://reviews.llvm.org/D42482?download=true"
+        sha256 "acf8c7b051eb752f7ab2c2a87f4419a49fb3355a83737dd193af0e6af4f8a5ff"
+      end
     end
 
-    resource "lma_ldd_fix" do
-      url "https://reviews.llvm.org/file/data/rgtecrvjuztcqezli7nj/PHID-FILE-sf4pe2wndw23h6o7dnlg/D41397.id127854.diff"
-      sha256 "a2310c441e240dcfd435c9b890445616fbd6bd52a5232d555b6cab538a4082dd"
-    end
+
   end
 
   keg_only "conflict with system llvm"
@@ -64,9 +67,6 @@ class ArmNoneEabiLlvm < Formula
     (buildpath/"tools/lld").install resource("lld")
 
     if build.head?
-      resource("lma_ldd_fix").stage do
-        system "patch", "-p0", "-i", Pathname.pwd/"D41397.id127854.diff", "-d", buildpath/"tools/lld"
-      end
     else
       resource("armv7em_arch_fix").stage do
          system "patch", "-p0", "-i", Pathname.pwd/"armv7em_arch_fix.diff", "-d", buildpath/""

@@ -21,6 +21,23 @@ class Armv7emCortexM4 < Formula
     end
   end
 
+  head do
+    # This is kinda stupid to use this URL as the recipe base URL, but
+    # Homebrew insists to be asymetric with resources.
+    url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/00bb3af1f74ee0f27afb0e5e9ce7ee4fedcefe28/CMakeLists.txt"
+    sha256 "578874c9cedecca03a96a134389534a5922ba4362c0a883cdfb2de554a415901"
+    # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
+    version "6.0.0-rc2"
+
+    resource "newlib" do
+      url "https://github.com/eblot/newlib-cygwin.git", :branch => "clang-armeabi-20170818"
+    end
+
+    resource "compiler-rt" do
+      url "http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_600/rc2", :using => :svn
+    end
+  end
+
   depends_on "arm-none-eabi-llvm" => :build
   depends_on "cmake" => :build
   depends_on "ninja" => :build
