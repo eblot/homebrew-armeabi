@@ -34,7 +34,7 @@ class Armv7emCortexM4 < Formula
     end
 
     resource "compiler-rt" do
-      url "http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_600/rc2", :using => :svn
+      url "http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_600/final", :using => :svn
     end
   end
 
@@ -75,7 +75,10 @@ class Armv7emCortexM4 < Formula
                 "--disable-newlib-unbuf-stream-opt",
                 "--enable-lite-exit",
                 "--enable-newlib-global-atexit",
-                "--enable-newlib-nano-formatted-io",
+                "--disable-newlib-nano-formatted-io",
+                "--disable-newlib-fvwrite-in-streamio",
+                "--enable-newlib-io-c99-formats",
+                "--disable-newlib-io-float",
                 "--disable-nls"
       system "make"
       system "make -j1 install; true"

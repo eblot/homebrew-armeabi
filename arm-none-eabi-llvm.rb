@@ -34,25 +34,24 @@ class ArmNoneEabiLlvm < Formula
   end
 
   head do
-    url "http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_600/rc2", :using => :svn
+    url "http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_600/final", :using => :svn
 
     resource "clang" do
-      url "http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_600/rc2", :using => :svn
+      url "http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_600/final", :using => :svn
     end
 
     resource "clang-extra-tools" do
-      url "http://llvm.org/svn/llvm-project/clang-tools-extra/tags/RELEASE_600/rc2", :using => :svn
+      url "http://llvm.org/svn/llvm-project/clang-tools-extra/tags/RELEASE_600/final", :using => :svn
     end
 
     resource "lld" do
-      url "http://llvm.org/svn/llvm-project/lld/tags/RELEASE_600/rc2", :using => :svn
+      url "http://llvm.org/svn/llvm-project/lld/tags/RELEASE_600/final", :using => :svn
 
-      patch :p0 do
-        url "https://reviews.llvm.org/D42482?download=true"
-        sha256 "acf8c7b051eb752f7ab2c2a87f4419a49fb3355a83737dd193af0e6af4f8a5ff"
-      end
+      # patch :p0 do
+      #   url "https://reviews.llvm.org/D43468?download=true"
+      #   sha256 "19eb8373fad989bcf63475069adfa2a8fb88ea43576887986b65d8a035c5a9af"
+      # end
     end
-
 
   end
 
