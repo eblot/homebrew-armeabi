@@ -9,15 +9,15 @@ class Armv6mCortexM0plus < Formula
     url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/00bb3af1f74ee0f27afb0e5e9ce7ee4fedcefe28/CMakeLists.txt"
     sha256 "578874c9cedecca03a96a134389534a5922ba4362c0a883cdfb2de554a415901"
     # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
-    version "5.0.1"
+    version "6.0.0"
 
     resource "newlib" do
       url "https://github.com/eblot/newlib-cygwin.git", :branch => "clang-armeabi-20170818"
     end
 
     resource "compiler-rt" do
-      url "https://releases.llvm.org/5.0.1/compiler-rt-5.0.1.src.tar.xz"
-      sha256 "4edd1417f457a9b3f0eb88082530490edf3cf6a7335cdce8ecbc5d3e16a895da"
+      url "https://releases.llvm.org/6.0.0/compiler-rt-6.0.0.src.tar.xz"
+      sha256 "d0cc1342cf57e9a8d52f5498da47a3b28d24ac0d39cbc92308781b3ee0cea79a"
     end
   end
 
@@ -27,7 +27,7 @@ class Armv6mCortexM0plus < Formula
     url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/00bb3af1f74ee0f27afb0e5e9ce7ee4fedcefe28/CMakeLists.txt"
     sha256 "578874c9cedecca03a96a134389534a5922ba4362c0a883cdfb2de554a415901"
     # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
-    version "6.0.0-rc2"
+    version "7.0.0-dev"
 
     resource "newlib" do
       url "https://github.com/eblot/newlib-cygwin.git", :branch => "clang-armeabi-20170818"
