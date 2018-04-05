@@ -2,9 +2,9 @@ require 'formula'
 
 class ArmNoneEabiGcc <Formula
   homepage 'https://gcc.gnu.org'
-  url 'http://ftpmirror.gnu.org/gcc/gcc-7.2.0/gcc-7.2.0.tar.xz'
-  mirror 'http://fr.mirror.babylon.network/gcc/releases/gcc-7.2.0/gcc-7.2.0.tar.xz'
-  sha256 '1cf7adf8ff4b5aa49041c8734bbcf1ad18cc4c94d0029aae0f4e48841088479a'
+  url 'http://ftpmirror.gnu.org/gcc/gcc-7.3.0/gcc-7.3.0.tar.xz'
+  mirror 'http://fr.mirror.babylon.network/gcc/releases/gcc-7.2.0/gcc-7.3.0.tar.xz'
+  sha256 '832ca6ae04636adbb430e865a1451adf6979ab44ca1c8374f61fba65645ce15c'
 
   depends_on 'gmp'
   depends_on 'mpfr'
@@ -15,8 +15,8 @@ class ArmNoneEabiGcc <Formula
   depends_on 'gcc' => :build
 
   resource 'newlib' do
-    url 'https://github.com/eblot/newlib-cygwin.git',
-        :using => :git, :branch => 'clang-armeabi-20170818'
+    url 'ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz'
+    sha256 'c8566335ee74e5fcaeb8595b4ebd0400c4b043d6acb3263ecb1314f8f5501332'
   end
 
   def install
@@ -26,7 +26,6 @@ class ArmNoneEabiGcc <Formula
     coredir = Dir.pwd
 
     resource('newlib').stage do
-      system 'ditto', Dir.pwd+'/libgloss', coredir+'/libgloss'
       system 'ditto', Dir.pwd+'/newlib', coredir+'/newlib'
     end
 
