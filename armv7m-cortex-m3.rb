@@ -15,7 +15,10 @@ class Armv7mCortexM3 < Formula
       url 'ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz'
       sha256 'c8566335ee74e5fcaeb8595b4ebd0400c4b043d6acb3263ecb1314f8f5501332'
 
-      patch :p1, :DATA
+      patch do
+        url "https://gist.githubusercontent.com/eblot/135ad4fe89008d54fdea89cdadc420de/raw/bd976c82203bf89d4b4ebc141014a88e2e8ba6f1/newlib-arm-eabi-3.0.0.patch"
+        sha256 "b2993bc29d83fddd436a7574e680aeae72feab165b9518ba19dcfea60df64b77"
+      end
     end
 
     resource "compiler-rt" do
@@ -36,11 +39,14 @@ class Armv7mCortexM3 < Formula
       url 'ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz'
       sha256 'c8566335ee74e5fcaeb8595b4ebd0400c4b043d6acb3263ecb1314f8f5501332'
 
-      patch :p1, :DATA
+      patch do
+        url "https://gist.githubusercontent.com/eblot/135ad4fe89008d54fdea89cdadc420de/raw/bd976c82203bf89d4b4ebc141014a88e2e8ba6f1/newlib-arm-eabi-3.0.0.patch"
+        sha256 "b2993bc29d83fddd436a7574e680aeae72feab165b9518ba19dcfea60df64b77"
+      end
     end
 
     resource "compiler-rt" do
-      url "http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_600/final", :using => :svn
+      url "http://llvm.org/svn/llvm-project/compiler-rt/trunk", :using => :svn
     end
   end
 
@@ -85,8 +91,7 @@ class Armv7mCortexM3 < Formula
                 "--disable-newlib-fvwrite-in-streamio",
                 "--enable-newlib-io-c99-formats",
                 "--disable-newlib-io-float",
-                "--disable-nls",
-                "--disable-libgloss"
+                "--disable-nls"
       system "make"
       system "make -j1 install; true"
       system "mv #{prefix}/armv7m-none-eabi/cortex-m3/armv7m-none-eabi/* #{prefix}/armv7m-none-eabi/cortex-m3/"
@@ -112,30 +117,3 @@ class Armv7mCortexM3 < Formula
   end
 
 end
-
-__END__
---- a/newlib/libc/stdlib/exit.c
-+++ b/newlib/libc/stdlib/exit.c
-@@ -54,7 +54,7 @@
- {
- #ifdef _LITE_EXIT
-   /* Refer to comments in __atexit.c for more details of lite exit.  */
--  void __call_exitprocs (int, void *)) __attribute__((weak);
-+  void __call_exitprocs (int, void *) __attribute__((weak));
-   if (__call_exitprocs)
- #endif
-     __call_exitprocs (code, NULL);
---- a/newlib/libc/include/stdio.h
-+++ b/newlib/libc/include/stdio.h
-@@ -689,9 +689,9 @@
- 	if ((_p->_flags & __SCLE) && _c == '\n')
- 	  __sputc_r (_ptr, '\r', _p);
- #endif
- 	if (--_p->_w >= 0 || (_p->_w >= _p->_lbfsize && (char)_c != '\n'))
--		return (*_p->_p++ = _c);
-+		return (*_p->_p++ = (unsigned char)_c);
- 	else
- 		return (__swbuf_r(_ptr, _c, _p));
- }
- #else
-
