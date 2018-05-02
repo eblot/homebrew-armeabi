@@ -4,7 +4,7 @@ Homebrew tap for ARM EABI toolchain, dedicated to build baremetal ARM Cortex-M
 applications from a macOS host.
 
 These toolchains have been used to build eCos-based application and bootloaders,
-and are now used to build applications for Nordik nRF52 BLE applications, 
+and are now used to build applications for Nordik nRF52 BLE applications,
 ST STM32L0 and STM32L4 baremetal and ChibiOS applications.
 
 ## Installation
@@ -25,9 +25,10 @@ ST STM32L0 and STM32L4 baremetal and ChibiOS applications.
      complex `target.ld` scripts with the stable 5.0 version. However the
      development version now supports most of the common script syntax.
    * Support the `--HEAD` option to install the development version of LLVM
- * C library (newlib) and compiler runtime for various targets: 
+ * C library (newlib 3.x) and compiler runtime for various targets:
     * Cortex-M4: `armv7em-cortex-m4.rb`
     * Cortex-M4 w/ FPU: `armv7em-cortex-m4f.rb`
+    * Cortex-M3: `armv7m-cortex-m3.rb`
     * Cortex-M0+: `armv6m-cortex-m0plus.rb`
  * CramFS tools to build/check CramFS volume: `cramfs.rb`
  * eCos configuration tool: `ecosconfig.rb`
