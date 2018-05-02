@@ -11,8 +11,11 @@ class Armv7emCortexM4f < Formula
     # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
     version "6.0.0"
 
-    resource "newlib" do
-      url "https://github.com/eblot/newlib-cygwin.git", :branch => "clang-armeabi-20170818"
+    resource 'newlib' do
+      url 'ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz'
+      sha256 'c8566335ee74e5fcaeb8595b4ebd0400c4b043d6acb3263ecb1314f8f5501332'
+
+      patch :p1, :DATA
     end
 
     resource "compiler-rt" do
@@ -29,8 +32,11 @@ class Armv7emCortexM4f < Formula
     # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
     version "7.0.0-dev"
 
-    resource "newlib" do
-      url "https://github.com/eblot/newlib-cygwin.git", :branch => "clang-armeabi-20170818"
+    resource 'newlib' do
+      url 'ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz'
+      sha256 'c8566335ee74e5fcaeb8595b4ebd0400c4b043d6acb3263ecb1314f8f5501332'
+
+      patch :p1, :DATA
     end
 
     resource "compiler-rt" do
@@ -80,7 +86,8 @@ class Armv7emCortexM4f < Formula
                 "--enable-newlib-io-c99-formats",
                 "--enable-newlib-io-float",
                 "--disable-newlib-io-long-double",
-                "--disable-nls"
+                "--disable-nls",
+                "--disable-libgloss"
       system "make"
       system "make -j1 install; true"
       system "mv #{prefix}/armv7em-none-eabi/cortex-m4f/armv7em-none-eabi/* #{prefix}/armv7em-none-eabi/cortex-m4f/"
@@ -106,3 +113,30 @@ class Armv7emCortexM4f < Formula
   end
 
 end
+
+__END__
+--- a/newlib/libc/stdlib/exit.c
++++ b/newlib/libc/stdlib/exit.c
+@@ -54,7 +54,7 @@
+ {
+ #ifdef _LITE_EXIT
+   /* Refer to comments in __atexit.c for more details of lite exit.  */
+-  void __call_exitprocs (int, void *)) __attribute__((weak);
++  void __call_exitprocs (int, void *) __attribute__((weak));
+   if (__call_exitprocs)
+ #endif
+     __call_exitprocs (code, NULL);
+--- a/newlib/libc/include/stdio.h
++++ b/newlib/libc/include/stdio.h
+@@ -689,9 +689,9 @@
+ 	if ((_p->_flags & __SCLE) && _c == '\n')
+ 	  __sputc_r (_ptr, '\r', _p);
+ #endif
+ 	if (--_p->_w >= 0 || (_p->_w >= _p->_lbfsize && (char)_c != '\n'))
+-		return (*_p->_p++ = _c);
++		return (*_p->_p++ = (unsigned char)_c);
+ 	else
+ 		return (__swbuf_r(_ptr, _c, _p));
+ }
+ #else
+
