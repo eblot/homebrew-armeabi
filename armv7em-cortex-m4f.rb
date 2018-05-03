@@ -6,8 +6,8 @@ class Armv7emCortexM4f < Formula
   stable do
     # This is kinda stupid to use this URL as the recipe base URL, but
     # Homebrew insists to be asymetric with resources.
-    url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/00bb3af1f74ee0f27afb0e5e9ce7ee4fedcefe28/CMakeLists.txt"
-    sha256 "578874c9cedecca03a96a134389534a5922ba4362c0a883cdfb2de554a415901"
+    url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/efb851a6b319dc7b11234f57e88f4a3b05c66560/CMakeLists.txt"
+    sha256 "ccb73bd04a60064385e87fc650c6c805771ceecf382a126e764e6c3b15237355"
     # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
     version "6.0.0"
 
@@ -30,8 +30,8 @@ class Armv7emCortexM4f < Formula
   head do
     # This is kinda stupid to use this URL as the recipe base URL, but
     # Homebrew insists to be asymetric with resources.
-    url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/00bb3af1f74ee0f27afb0e5e9ce7ee4fedcefe28/CMakeLists.txt"
-    sha256 "578874c9cedecca03a96a134389534a5922ba4362c0a883cdfb2de554a415901"
+    url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/efb851a6b319dc7b11234f57e88f4a3b05c66560/CMakeLists.txt"
+    sha256 "ccb73bd04a60064385e87fc650c6c805771ceecf382a126e764e6c3b15237355"
     # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
     version "7.0.0-dev"
 
@@ -114,6 +114,8 @@ class Armv7emCortexM4f < Formula
                 buildpath/"compiler-rt/cortex-m"
       system "ninja"
       system "cp libcompiler_rt.a #{prefix}/armv7em-none-eabi/cortex-m4f/lib/"
+      ln_s "#{prefix}/armv7em-none-eabi/cortex-m4f/lib/libcompiler_rt.a",
+           "#{prefix}/armv7em-none-eabi/cortex-m4f/lib/libclang_rt.builtins-armv7em.a.a"
     end
   end
 
