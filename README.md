@@ -30,6 +30,6 @@ ST STM32L0 and STM32L4 baremetal and ChibiOS applications.
     * Cortex-M4 w/ FPU: `armv7em-cortex-m4f.rb`
     * Cortex-M3: `armv7m-cortex-m3.rb`
     * Cortex-M0+: `armv6m-cortex-m0plus.rb`
+ * nRF52 script to fix Nordik SDK supervisor calls: `nrfsvc.py`
  * CramFS tools to build/check CramFS volume: `cramfs.rb`
  * eCos configuration tool: `ecosconfig.rb`
- * nRF52 script to fix Nordik SDK supervisor calls: `nrfsvc.py`
