@@ -24,23 +24,18 @@ class ArmNoneEabiLlvm < Formula
   end
 
   head do
-    url "http://llvm.org/svn/llvm-project/llvm/trunk", :using => :svn
+    url "http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_700/rc2/", :using => :svn
 
     resource "clang" do
-      url "http://llvm.org/svn/llvm-project/cfe/trunk", :using => :svn
+      url "http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_700/rc2/", :using => :svn
     end
 
     resource "clang-extra-tools" do
-      url "http://llvm.org/svn/llvm-project/clang-tools-extra/trunk", :using => :svn
+      url "http://llvm.org/svn/llvm-project/clang-tools-extra/tags/RELEASE_700/rc2", :using => :svn
     end
 
     resource "lld" do
-      url "http://llvm.org/svn/llvm-project/lld/trunk", :using => :svn
-
-      # patch :p0 do
-      #   url "https://reviews.llvm.org/D43468?download=true"
-      #   sha256 "19eb8373fad989bcf63475069adfa2a8fb88ea43576887986b65d8a035c5a9af"
-      # end
+      url "http://llvm.org/svn/llvm-project/lld/tags/RELEASE_700/rc2", :using => :svn
     end
 
   end
@@ -54,12 +49,6 @@ class ArmNoneEabiLlvm < Formula
     (buildpath/"tools/clang").install resource("clang")
     (buildpath/"tools/clang/tools/extra").install resource("clang-extra-tools")
     (buildpath/"tools/lld").install resource("lld")
-
-    # if build.head?
-    #   resource("armv_lld_fix").stage do
-    #     system "patch", "-p0", "-i", Pathname.pwd/"lld.diff", "-d", buildpath/"tools/lld"
-    #   end
-    # end
 
     args = %w[
       -DCMAKE_BUILD_TYPE=Release
