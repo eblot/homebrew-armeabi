@@ -1,9 +1,9 @@
 require 'formula'
 
 class ArmNoneEabiGdb <Formula
-  url 'http://ftp.gnu.org/gnu/gdb/gdb-8.1.tar.xz'
+  url 'http://ftp.gnu.org/gnu/gdb/gdb-8.2.tar.xz'
   homepage 'http://www.gnu.org/software/gdb/'
-  sha256 'af61a0263858e69c5dce51eab26662ff3d2ad9aa68da9583e8143b5426be4b34'
+  sha256 'c3a441a29c7c89720b734e5a9c6289c0a06be7e0c76ef538f7bbcef389347c39'
 
   depends_on 'gmp'
   depends_on 'mpfr'
@@ -16,6 +16,7 @@ class ArmNoneEabiGdb <Formula
                 "--with-mpfr=#{Formulary.factory('mpfr').prefix}",
                 "--with-mpc=#{Formulary.factory('libmpc').prefix}",
                 "--with-readline=#{Formulary.factory('readline').prefix}",
+                "--with-python",
                 "--without-cloog",
                 "--enable-lto","--disable-werror"
     system "make"
