@@ -46,7 +46,7 @@ class Armv7mCortexM3 < Formula
     end
 
     resource "compiler-rt" do
-      url "http://llvm.org/svn/llvm-project/compiler-rt/trunk", :using => :svn
+      url "http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_700/rc3", :using => :svn
     end
   end
 

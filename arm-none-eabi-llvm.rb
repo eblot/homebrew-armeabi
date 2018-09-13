@@ -24,18 +24,18 @@ class ArmNoneEabiLlvm < Formula
   end
 
   head do
-    url "http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_700/rc2/", :using => :svn
+    url "http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_700/rc3/", :using => :svn
 
     resource "clang" do
-      url "http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_700/rc2/", :using => :svn
+      url "http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_700/rc3/", :using => :svn
     end
 
     resource "clang-extra-tools" do
-      url "http://llvm.org/svn/llvm-project/clang-tools-extra/tags/RELEASE_700/rc2", :using => :svn
+      url "http://llvm.org/svn/llvm-project/clang-tools-extra/tags/RELEASE_700/rc3", :using => :svn
     end
 
     resource "lld" do
-      url "http://llvm.org/svn/llvm-project/lld/tags/RELEASE_700/rc2", :using => :svn
+      url "http://llvm.org/svn/llvm-project/lld/tags/RELEASE_700/rc3", :using => :svn
     end
 
   end
