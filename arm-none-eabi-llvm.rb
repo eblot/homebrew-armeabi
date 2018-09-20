@@ -3,41 +3,40 @@ class ArmNoneEabiLlvm < Formula
   homepage "https://llvm.org/"
 
   stable do
-    url "https://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz"
-    sha256 "1ff53c915b4e761ef400b803f07261ade637b0c269d99569f18040f3dcee4408"
+    url "https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz"
+    sha256 "8bc1f844e6cbde1b652c19c1edebc1864456fd9c78b8c1bea038e51b363fe222"
 
     resource "clang" do
-      url "https://releases.llvm.org/6.0.0/cfe-6.0.0.src.tar.xz"
-      sha256 "e07d6dd8d9ef196cfc8e8bb131cbd6a2ed0b1caf1715f9d05b0f0eeaddb6df32"
+      url "https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz"
+      sha256 "550212711c752697d2f82c648714a7221b1207fd9441543ff4aa9e3be45bba55"
     end
 
     resource "clang-extra-tools" do
-      url "https://releases.llvm.org/6.0.0/clang-tools-extra-6.0.0.src.tar.xz"
-      sha256 "053b424a4cd34c9335d8918734dd802a8da612d13a26bbb88fcdf524b2d989d2"
+      url "https://releases.llvm.org/7.0.0/clang-tools-extra-7.0.0.src.tar.xz"
+      sha256 "937c5a8c8c43bc185e4805144744799e524059cac877a44d9063926cd7a19dbe"
     end
 
     resource "lld" do
-      url "https://releases.llvm.org/6.0.0/lld-6.0.0.src.tar.xz"
-      sha256 "6b8c4a833cf30230c0213d78dbac01af21387b298225de90ab56032ca79c0e0b"
+      url "https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz"
+      sha256 "fbcf47c5e543f4cdac6bb9bbbc6327ff24217cd7eafc5571549ad6d237287f9c"
     end
 
   end
 
   head do
-    url "http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_700/rc3/", :using => :svn
+    url "http://llvm.org/svn/llvm-project/llvm/trunk", :using => :svn
 
     resource "clang" do
-      url "http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_700/rc3/", :using => :svn
+      url "http://llvm.org/svn/llvm-project/cfe/trunk", :using => :svn
     end
 
     resource "clang-extra-tools" do
-      url "http://llvm.org/svn/llvm-project/clang-tools-extra/tags/RELEASE_700/rc3", :using => :svn
+      url "http://llvm.org/svn/llvm-project/clang-tools-extra/trunk", :using => :svn
     end
 
     resource "lld" do
-      url "http://llvm.org/svn/llvm-project/lld/tags/RELEASE_700/rc3", :using => :svn
+      url "http://llvm.org/svn/llvm-project/lld/trunk", :using => :svn
     end
-
   end
 
   keg_only "conflict with system llvm"

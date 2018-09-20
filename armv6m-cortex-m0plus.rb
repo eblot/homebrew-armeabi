@@ -9,7 +9,7 @@ class Armv6mCortexM0plus < Formula
     url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/efb851a6b319dc7b11234f57e88f4a3b05c66560/CMakeLists.txt"
     sha256 "ccb73bd04a60064385e87fc650c6c805771ceecf382a126e764e6c3b15237355"
     # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
-    version "6.0.0"
+    version "7.0.0"
 
     resource "newlib" do
       url "ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz"
@@ -32,8 +32,8 @@ class Armv6mCortexM0plus < Formula
     end
 
     resource "compiler-rt" do
-      url "https://releases.llvm.org/6.0.0/compiler-rt-6.0.0.src.tar.xz"
-      sha256 "d0cc1342cf57e9a8d52f5498da47a3b28d24ac0d39cbc92308781b3ee0cea79a"
+      url "https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz"
+      sha256 "bdec7fe3cf2c85f55656c07dfb0bd93ae46f2b3dd8f33ff3ad6e7586f4c670d6"
     end
   end
 
@@ -43,7 +43,7 @@ class Armv6mCortexM0plus < Formula
     url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/efb851a6b319dc7b11234f57e88f4a3b05c66560/CMakeLists.txt"
     sha256 "ccb73bd04a60064385e87fc650c6c805771ceecf382a126e764e6c3b15237355"
     # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
-    version "7.0.0-dev"
+    version "8.0.0-dev"
 
     resource "newlib" do
       url "ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz"
@@ -66,7 +66,7 @@ class Armv6mCortexM0plus < Formula
     end
 
     resource "compiler-rt" do
-      url "http://llvm.org/svn/llvm-project/compiler-rt/tags/RELEASE_700/rc3", :using => :svn
+      url "http://llvm.org/svn/llvm-project/compiler-rt/trunk", :using => :svn
     end
   end
 
