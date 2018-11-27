@@ -115,6 +115,8 @@ class Armv7mCortexM3 < Formula
       system "cp libcompiler_rt.a #{prefix}/armv7m-none-eabi/cortex-m3/lib/"
       ln_s "#{prefix}/armv7m-none-eabi/cortex-m3/lib/libcompiler_rt.a",
            "#{prefix}/armv7m-none-eabi/cortex-m3/lib/libclang_rt.builtins-armv7m.a.a"
+      ln_s "#{prefix}/armv7m-none-eabi/cortex-m3/lib/libcompiler_rt.a",
+           "#{prefix}/armv7m-none-eabi/cortex-m3/lib/libclang_rt.builtins-arm.a.a"
     end
   end
 

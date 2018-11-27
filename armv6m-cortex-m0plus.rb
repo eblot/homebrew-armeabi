@@ -135,6 +135,8 @@ class Armv6mCortexM0plus < Formula
       system "cp libcompiler_rt.a #{prefix}/armv6m-none-eabi/cortex-m0plus/lib/"
       ln_s "#{prefix}/armv6m-none-eabi/cortex-m0plus/lib/libcompiler_rt.a",
            "#{prefix}/armv6m-none-eabi/cortex-m0plus/lib/libclang_rt.builtins-armv6m.a.a"
+      ln_s "#{prefix}/armv6m-none-eabi/cortex-m0plus/lib/libcompiler_rt.a",
+           "#{prefix}/armv6m-none-eabi/cortex-m0plus/lib/libclang_rt.builtins-arm.a.a"
     end
   end
 
