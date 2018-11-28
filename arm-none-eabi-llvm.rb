@@ -19,6 +19,11 @@ class ArmNoneEabiLlvm < Formula
     resource "lld" do
       url "https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz"
       sha256 "fbcf47c5e543f4cdac6bb9bbbc6327ff24217cd7eafc5571549ad6d237287f9c"
+
+      patch do
+        url "https://gist.githubusercontent.com/eblot/43552f8c01cc7d2ee4faef42454c2c83/raw/7ccb5c0a86024a3f189acb0f72a58aee57ba8c54/lld_armv6m_thunk_support.diff"
+        sha256 "609dbc5d453bada38c410833a3e43b77c5608d2208d46969a4417e47f0612660"
+      end
     end
 
   end
@@ -36,6 +41,11 @@ class ArmNoneEabiLlvm < Formula
 
     resource "lld" do
       url "http://llvm.org/svn/llvm-project/lld/trunk", :using => :svn
+
+      patch do
+        url "https://gist.githubusercontent.com/eblot/43552f8c01cc7d2ee4faef42454c2c83/raw/7ccb5c0a86024a3f189acb0f72a58aee57ba8c54/lld_armv6m_thunk_support.diff"
+        sha256 "609dbc5d453bada38c410833a3e43b77c5608d2208d46969a4417e47f0612660"
+      end
     end
   end
 
