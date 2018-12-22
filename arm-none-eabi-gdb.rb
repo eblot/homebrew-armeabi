@@ -10,6 +10,10 @@ class ArmNoneEabiGdb <Formula
   depends_on 'libmpc'
   depends_on 'readline'
 
+  # Linux dependencies.
+  depends_on 'python@2' unless OS.mac?
+  depends_on 'guile' unless OS.mac?
+
   def install
     system "./configure", "--prefix=#{prefix}", "--target=arm-none-eabi",
                 "--with-gmp=#{Formulary.factory('gmp').prefix}",
