@@ -9,21 +9,21 @@ class Armv7mCortexM3 < Formula
     url "https://gist.githubusercontent.com/eblot/d0d2db95e1d0aa4a36deb1e46d61382c/raw/efb851a6b319dc7b11234f57e88f4a3b05c66560/CMakeLists.txt"
     sha256 "ccb73bd04a60064385e87fc650c6c805771ceecf382a126e764e6c3b15237355"
     # Follow LLVM/compiler RT versionning (Homebrew wants a version here)
-    version "7.0.0"
+    version "7.0.1"
 
     resource 'newlib' do
-      url 'ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz'
-      sha256 'c8566335ee74e5fcaeb8595b4ebd0400c4b043d6acb3263ecb1314f8f5501332'
+      url 'ftp://sourceware.org/pub/newlib/newlib-3.1.0.20181231.tar.gz'
+      sha256 '9e12fea7297648b114434033ed4458755afe7b9b6c7d58123389e82bd37681c0'
 
       patch do
-        url "https://gist.githubusercontent.com/eblot/135ad4fe89008d54fdea89cdadc420de/raw/bd976c82203bf89d4b4ebc141014a88e2e8ba6f1/newlib-arm-eabi-3.0.0.patch"
-        sha256 "b2993bc29d83fddd436a7574e680aeae72feab165b9518ba19dcfea60df64b77"
+        url "https://gist.githubusercontent.com/eblot/2f0af31b27cf3d6300b190906ae58c5c/raw/de43bc16b7280c97467af09ef329fc527296226e/newlib-arm-eabi-3.1.0.patch"
+        sha256 "e30f7f37c9562ef89685c7a69c25139b1047a13be69a0f82459593e7fc3fab90"
       end
     end
 
     resource "compiler-rt" do
-      url "https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz"
-      sha256 "bdec7fe3cf2c85f55656c07dfb0bd93ae46f2b3dd8f33ff3ad6e7586f4c670d6"
+      url "https://releases.llvm.org/7.0.1/compiler-rt-7.0.1.src.tar.xz"
+      sha256 "782edfc119ee172f169c91dd79f2c964fb6b248bd9b73523149030ed505bbe18"
     end
   end
 
