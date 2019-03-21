@@ -3,50 +3,28 @@ class ArmNoneEabiLlvm < Formula
   homepage "https://llvm.org/"
 
   stable do
-    url "http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz"
-    sha256 "a38dfc4db47102ec79dcc2aa61e93722c5f6f06f0a961073bd84b78fb949419b"
+    url "http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz"
+    sha256 "8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c"
 
     resource "clang" do
-      url "https://releases.llvm.org/7.0.1/cfe-7.0.1.src.tar.xz"
-      sha256 "a45b62dde5d7d5fdcdfa876b0af92f164d434b06e9e89b5d0b1cbc65dfe3f418"
+      url "https://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz"
+      sha256 "084c115aab0084e63b23eee8c233abb6739c399e29966eaeccfc6e088e0b736b"
     end
 
     resource "clang-extra-tools" do
-      url "https://releases.llvm.org/7.0.1/clang-tools-extra-7.0.1.src.tar.xz"
-      sha256 "4c93c7d2bb07923a8b272da3ef7914438080aeb693725f4fc5c19cd0e2613bed"
+      url "https://releases.llvm.org/8.0.0/clang-tools-extra-8.0.0.src.tar.xz"
+      sha256 "4f00122be408a7482f2004bcf215720d2b88cf8dc78b824abb225da8ad359d4b"
     end
 
     resource "lld" do
-      url "https://releases.llvm.org/7.0.1/lld-7.0.1.src.tar.xz"
-      sha256 "8869aab2dd2d8e00d69943352d3166d159d7eae2615f66a684f4a0999fc74031"
-
-      patch do
-        url "https://gist.githubusercontent.com/eblot/43552f8c01cc7d2ee4faef42454c2c83/raw/157c5fee1d9e2ea4c87af78511ce81702a473e80/lld_armv6m_thunk_support.diff"
-        sha256 "74ede4c6d02d12dce51c147a2d3a8e7113915df556e112828406ba9c927385ed"
-      end
+      url "https://releases.llvm.org/8.0.0/lld-8.0.0.src.tar.xz"
+      sha256 "9caec8ec922e32ffa130f0fb08e4c5a242d7e68ce757631e425e9eba2e1a6e37"
     end
 
   end
 
   head do
-    url "http://llvm.org/svn/llvm-project/llvm/trunk", :using => :svn
-
-    resource "clang" do
-      url "http://llvm.org/svn/llvm-project/cfe/trunk", :using => :svn
-    end
-
-    resource "clang-extra-tools" do
-      url "http://llvm.org/svn/llvm-project/clang-tools-extra/trunk", :using => :svn
-    end
-
-    resource "lld" do
-      url "http://llvm.org/svn/llvm-project/lld/trunk", :using => :svn
-
-      patch do
-        url "https://reviews.llvm.org/file/data/rivp5hm6gvgvm6lvpdft/PHID-FILE-c65sxsav2henidhqxxsq/D55555.diff"
-        sha256 "609dbc5d453bada38c410833a3e43b77c5608d2208d46969a4417e47f0612660"
-      end
-    end
+    url "https://github.com/llvm/llvm-project", :using => :git, :branch => "release/9.x"
   end
 
   # beware that forcing link may seriously break your installation, as
@@ -58,11 +36,12 @@ class ArmNoneEabiLlvm < Formula
   depends_on "ninja" => :build
 
   def install
+
     (buildpath/"tools/clang").install resource("clang")
     (buildpath/"tools/clang/tools/extra").install resource("clang-extra-tools")
     (buildpath/"tools/lld").install resource("lld")
 
-    args = %w[
+    args = %W[
       -DCMAKE_BUILD_TYPE=Release
       -DLLVM_ENABLE_SPHINX=False
       -DLLVM_INCLUDE_TESTS=False
@@ -70,8 +49,8 @@ class ArmNoneEabiLlvm < Formula
       -DLLVM_INSTALL_UTILS=ON
     ]
 
-    mktemp do
-      system "cmake", "-G", "Ninja", buildpath, *(args + std_cmake_args)
+    mkdir "build" do
+      system "cmake", "-G", "Ninja", "..", *(std_cmake_args + args)
       system "ninja"
       system "cmake", "--build", ".", "--target", "install"
     end
