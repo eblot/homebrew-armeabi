@@ -24,26 +24,6 @@ class Armv7emCortexM4 < Formula
     end
   end
 
-  head do
-    url "https://github.com/llvm/llvm-project", :using => :git
-
-    patch do
-      # note: there is no guarantee whatsoever than this patch may apply on any LLVM development version
-      url "https://raw.githubusercontent.com/burnpanck/docker-llvm-armeabi/10b0c46be7df2c543e21a8ac592eb9fd6c7cea69/patches/0001-support-FPv4-SP.patch"
-      sha256 "170da3053537885af5a4f0ae83444a7dbc6c81e4c8b27d0c13bdfa7a18533642"
-    end
-
-    resource "newlib" do
-      url 'ftp://sourceware.org/pub/newlib/newlib-3.1.0.tar.gz'
-      sha256 'fb4fa1cc21e9060719208300a61420e4089d6de6ef59cf533b57fe74801d102a'
-
-      patch do
-        url "https://gist.githubusercontent.com/eblot/2f0af31b27cf3d6300b190906ae58c5c/raw/de43bc16b7280c97467af09ef329fc527296226e/newlib-arm-eabi-3.1.0.patch"
-        sha256 "e30f7f37c9562ef89685c7a69c25139b1047a13be69a0f82459593e7fc3fab90"
-      end
-    end
-  end
-
   depends_on "arm-none-eabi-llvm" => :build
   depends_on "cmake" => :build
   depends_on "ninja" => :build
