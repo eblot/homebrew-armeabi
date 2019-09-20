@@ -21,6 +21,7 @@ class ArmNoneEabiLlvm < Formula
   depends_on "swig" => :build
   depends_on "python"
   depends_on "ncurses"
+  depends_on "libedit"
 
   def install
 
