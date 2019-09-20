@@ -18,12 +18,15 @@ class ArmNoneEabiLlvm < Formula
 
   depends_on "cmake" => :build
   depends_on "ninja" => :build
+  depends_on "swig" => :build
+  depends_on "python"
+  depends_on "ncurses"
 
   def install
 
     args = %W[
       -DCMAKE_BUILD_TYPE=Release
-      -DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld
+      -DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld;lldb
       -DLLVM_ENABLE_SPHINX=False
       -DLLVM_INCLUDE_TESTS=False
       -DLLVM_TARGET_ARCH=ARM
