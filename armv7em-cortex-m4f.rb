@@ -101,7 +101,7 @@ class Armv7emCortexM4f < Formula
 
     mktemp do
       system "cmake",
-                "-G", "Ninja",
+                "-G", "Ninja", "-Wno-dev",
                 "-DCMAKE_INSTALL_PREFIX=#{prefix}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
