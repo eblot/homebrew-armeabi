@@ -3,28 +3,12 @@ class ArmNoneEabiLlvm < Formula
   homepage "https://llvm.org/"
 
   stable do
-    url "http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz"
-    sha256 "8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c"
-
-    resource "clang" do
-      url "https://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz"
-      sha256 "084c115aab0084e63b23eee8c233abb6739c399e29966eaeccfc6e088e0b736b"
-    end
-
-    resource "clang-extra-tools" do
-      url "https://releases.llvm.org/8.0.0/clang-tools-extra-8.0.0.src.tar.xz"
-      sha256 "4f00122be408a7482f2004bcf215720d2b88cf8dc78b824abb225da8ad359d4b"
-    end
-
-    resource "lld" do
-      url "https://releases.llvm.org/8.0.0/lld-8.0.0.src.tar.xz"
-      sha256 "9caec8ec922e32ffa130f0fb08e4c5a242d7e68ce757631e425e9eba2e1a6e37"
-    end
-
+    url "https://github.com/llvm/llvm-project/archive/llvmorg-9.0.0.tar.gz"
+    sha256 "7807fac25330e24e9955ca46cd855dd34bbc9cc4fdba8322366206654d1036f2"
   end
 
   head do
-    url "https://github.com/llvm/llvm-project", :using => :git, :branch => "release/9.x"
+    url "https://github.com/llvm/llvm-project", :using => :git
   end
 
   # beware that forcing link may seriously break your installation, as
@@ -37,22 +21,22 @@ class ArmNoneEabiLlvm < Formula
 
   def install
 
-    (buildpath/"tools/clang").install resource("clang")
-    (buildpath/"tools/clang/tools/extra").install resource("clang-extra-tools")
-    (buildpath/"tools/lld").install resource("lld")
-
     args = %W[
       -DCMAKE_BUILD_TYPE=Release
+      -DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld
       -DLLVM_ENABLE_SPHINX=False
       -DLLVM_INCLUDE_TESTS=False
+      -DLLVM_TARGET_ARCH=ARM
       -DLLVM_TARGETS_TO_BUILD=ARM
       -DLLVM_INSTALL_UTILS=ON
+      -DLLVM_DEFAULT_TARGET_TRIPLE=arm-none-eabi
+      -DCMAKE_CROSSCOMPILING=True
     ]
 
     mkdir "build" do
-      system "cmake", "-G", "Ninja", "..", *(std_cmake_args + args)
+      system "cmake", "-G", "Ninja", "../llvm", *(std_cmake_args + args)
       system "ninja"
-      system "cmake", "--build", ".", "--target", "install"
+      system "ninja", "install"
     end
 
   end
