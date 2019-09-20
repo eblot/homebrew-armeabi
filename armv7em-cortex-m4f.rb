@@ -1,5 +1,5 @@
 class Armv7emCortexM4f < Formula
-  desc "Newlib & compiler runtime for baremetal Cortex-M4F targets"
+  desc "Newlib & compiler runtime for baremetal Cortex-M4 w/VFP targets"
   homepage "https://sourceware.org/newlib/"
   # and homepage "http://compiler-rt.llvm.org/"
 
