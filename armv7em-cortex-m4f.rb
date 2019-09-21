@@ -1,36 +1,26 @@
 class Armv7emCortexM4f < Formula
-  desc "Newlib & compiler runtime for baremetal Cortex-M4 w/VFP targets"
-  homepage "https://sourceware.org/newlib/"
-  # and homepage "http://compiler-rt.llvm.org/"
+  desc "C and C++ libraries for baremetal Cortex-M4 w/VFP targets"
+  homepage "https://llvm.org/"
+  # and "https://sourceware.org/newlib/"
 
   stable do
     url "https://github.com/llvm/llvm-project/archive/llvmorg-9.0.0.tar.gz"
     sha256 "7807fac25330e24e9955ca46cd855dd34bbc9cc4fdba8322366206654d1036f2"
 
+    # use work from Yves Delley
     patch do
-      # use work from Yves Delley
       url "https://raw.githubusercontent.com/burnpanck/docker-llvm-armeabi/10b0c46be7df2c543e21a8ac592eb9fd6c7cea69/patches/0001-support-FPv4-SP.patch"
       sha256 "170da3053537885af5a4f0ae83444a7dbc6c81e4c8b27d0c13bdfa7a18533642"
     end
 
-    resource "newlib" do
-      url 'ftp://sourceware.org/pub/newlib/newlib-3.1.0.tar.gz'
-      sha256 'fb4fa1cc21e9060719208300a61420e4089d6de6ef59cf533b57fe74801d102a'
-
-      patch do
-        url "https://gist.githubusercontent.com/eblot/2f0af31b27cf3d6300b190906ae58c5c/raw/de43bc16b7280c97467af09ef329fc527296226e/newlib-arm-eabi-3.1.0.patch"
-        sha256 "e30f7f37c9562ef89685c7a69c25139b1047a13be69a0f82459593e7fc3fab90"
-      end
+    patch do
+      url "https://raw.githubusercontent.com/burnpanck/docker-llvm-armeabi/10b0c46be7df2c543e21a8ac592eb9fd6c7cea69/patches/0001-enable-atomic-header-on-thread-less-builds.patch"
+      sha256 "02db625a01dff58cfd4d6f7a73355e4148c39c920902c497d49c0e3e55cfb191"
     end
-  end
-
-  head do
-    url "https://github.com/llvm/llvm-project", :using => :git
 
     patch do
-      # note: there is no guarantee whatsoever than this patch may apply on any LLVM development version
-      url "https://raw.githubusercontent.com/burnpanck/docker-llvm-armeabi/10b0c46be7df2c543e21a8ac592eb9fd6c7cea69/patches/0001-support-FPv4-SP.patch"
-      sha256 "170da3053537885af5a4f0ae83444a7dbc6c81e4c8b27d0c13bdfa7a18533642"
+      url "https://raw.githubusercontent.com/burnpanck/docker-llvm-armeabi/10b0c46be7df2c543e21a8ac592eb9fd6c7cea69/patches/0001-explicitly-specify-location-of-libunwind-in-static-b.patch"
+      sha256 "cb46ee6e3551c37a61d6563b8e52b7f5b5a493e559700a147ee29b970c659c11"
     end
 
     resource "newlib" do
@@ -50,13 +40,31 @@ class Armv7emCortexM4f < Formula
   depends_on "python" => :build
 
   def install
+    llvm = Formulary.factory 'arm-none-eabi-llvm'
+
     xtarget = "armv7em-none-eabi"
     xcpu = "cortex-m4"
     xcpudir = "cortex-m4f"
-    # it is not possible to use -Os for now, as clang integrated assembler rejects an ldrb.w opcode, to be fixed.
-    xcflags = "-mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb -mabi=aapcs -g -O3 -ffunction-sections -fdata-sections"
 
-    llvm = Formulary.factory 'arm-none-eabi-llvm'
+    xabi = "-mthumb -mabi=aapcs"
+    xcxxfpu = "-mfloat-abi=hard -mfpu=fpv4-sp-d16"
+    # it is not possible to use -Os for now, as clang integrated assembler
+    # rejects an ldrb.w opcode, to be fixed.
+    xcxxopts = "-g -O2"
+    xcxxfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden"
+
+    xcxxtarget = "-mcpu=#{xcpu} #{xabi}"
+    xsysroot = "#{prefix}/#{xtarget}/#{xcpudir}"
+
+    xcflags = "#{xcxxtarget} #{xcxxfpu} #{xcxxopts} #{xcxxfeatures}"
+
+    xcxxdefs = "-D_LIBUNWIND_IS_BAREMETAL=1 -D_GNU_SOURCE=1 -D_POSIX_TIMERS=1 -D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION"
+    xcxxnothread = "-D_LIBCPP_HAS_NO_THREADS=1"
+
+    xcxx_inc="-I${xsysroot}/include"
+    xcxx_lib="-L${xsysroot}/lib"
+
+    xcxxflags = "#{xcxxtarget} #{xcxxfpu} #{xcxxopts} #{xcxxfeatures} #{xcxxdefs} #{xcxx_inc}"
 
     (buildpath/"newlib").install resource("newlib")
 
@@ -67,12 +75,13 @@ class Armv7emCortexM4f < Formula
     ENV['NM_FOR_TARGET']="#{llvm.bin}/llvm-nm"
     ENV['RANLIB_FOR_TARGET']="#{llvm.bin}/llvm-ranlib"
     ENV['READELF_FOR_TARGET']="#{llvm.bin}/llvm-readelf"
-    ENV['CFLAGS_FOR_TARGET']="-target #{xtarget} -mcpu=#{xcpu} #{xcflags} -Wno-unused-command-line-argument"
+    ENV['CFLAGS_FOR_TARGET']="-target #{xtarget} #{xcflags} -Wno-unused-command-line-argument"
     ENV['AS_FOR_TARGET']="#{llvm.bin}/clang"
 
     host=`cc -dumpmachine`.strip
 
     mktemp do
+      puts "--- newlib ---"
       system "#{buildpath}/newlib/configure",
                 "--host=#{host}",
                 "--build=#{host}",
@@ -100,6 +109,7 @@ class Armv7emCortexM4f < Formula
     end
 
     mktemp do
+      puts "--- compiler-rt ---"
       system "cmake",
                 "-G", "Ninja", "-Wno-dev",
                 "-DCMAKE_INSTALL_PREFIX=#{prefix}",
@@ -141,8 +151,140 @@ class Armv7emCortexM4f < Formula
 
       system "ninja"
       system "ninja install"
-      system "mv #{prefix}/lib/baremetal/*.a #{prefix}/#{xtarget}/#{xcpudir}/lib"
+      system "mv #{prefix}/lib/baremetal/* #{prefix}/#{xtarget}/#{xcpudir}/lib"
+      system "rmdir #{prefix}/lib/baremetal"
     end
-  end
 
-end
+    mktemp do
+      puts "--- libcxx ---"
+      system "cmake",
+                "-G", "Ninja", "-Wno-dev",
+                "-DCMAKE_INSTALL_PREFIX=#{prefix}",
+                "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
+                "-DCMAKE_SYSTEM_PROCESSOR=arm",
+                "-DCMAKE_SYSTEM_NAME=Generic",
+                "-DCMAKE_CROSSCOMPILING=ON",
+                "-DCMAKE_CXX_COMPILER_FORCED=TRUE",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_C_COMPILER=#{llvm.bin}/clang",
+                "-DCMAKE_CXX_COMPILER=#{llvm.bin}/clang++",
+                "-DCMAKE_LINKER=#{llvm.bin}/clang",
+                "-DCMAKE_AR=#{llvm.bin}/llvm-ar",
+                "-DCMAKE_RANLIB=#{llvm.bin}/llvm-ranlib",
+                "-DCMAKE_C_COMPILER_TARGET=#{xtarget}",
+                "-DCMAKE_CXX_COMPILER_TARGET=#{xtarget}",
+                "-DCMAKE_SYSROOT=#{xsysroot}",
+                "-DCMAKE_SYSROOT_LINK=#{xsysroot}",
+                "-DCMAKE_C_FLAGS=#{xcxxflags}",
+                "-DCMAKE_CXX_FLAGS=#{xcxxflags}",
+                "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
+                "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
+                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
+                "-DLLVM_TARGETS_TO_BUILD=ARM",
+                "-DLIBCXX_ENABLE_SHARED=OFF",
+                "-DLIBCXX_ENABLE_FILESYSTEM=OFF",
+                "-DLIBCXX_ENABLE_THREADS=OFF",
+                "-DLIBCXX_ENABLE_MONOTONIC_CLOCK=OFF",
+                "-DLIBCXX_ENABLE_ABI_LINKER_SCRIPT=OFF",
+                "-DLIBCXX_ENABLE_EXPERIMENTAL_LIBRARY=ON",
+                "-DLIBCXX_INCLUDE_TESTS=OFF",
+                "-DLIBCXX_INCLUDE_BENCHMARKS=OFF",
+                "-DLIBCXX_USE_COMPILER_RT=ON",
+                "-DLIBCXX_CXX_ABI=libcxxabi",
+                "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=#{buildpath}/libcxxabi/include",
+                "-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON",
+                "-DLIBCXXABI_USE_LLVM_UNWINDER=ON",
+                "-DUNIX=1",
+                "#{buildpath}/libcxx"
+
+      system "ninja"
+      system "ninja install"
+    end # libcxx
+
+    mktemp do
+      puts "--- libunwind ---"
+      system "cmake",
+                "-G", "Ninja", "-Wno-dev",
+                "-DCMAKE_INSTALL_PREFIX=#{prefix}",
+                "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
+                "-DCMAKE_SYSTEM_PROCESSOR=arm",
+                "-DCMAKE_SYSTEM_NAME=Generic",
+                "-DCMAKE_CROSSCOMPILING=ON",
+                "-DCMAKE_CXX_COMPILER_FORCED=TRUE",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_C_COMPILER=#{llvm.bin}/clang",
+                "-DCMAKE_CXX_COMPILER=#{llvm.bin}/clang++",
+                "-DCMAKE_LINKER=#{llvm.bin}/clang",
+                "-DCMAKE_AR=#{llvm.bin}/llvm-ar",
+                "-DCMAKE_RANLIB=#{llvm.bin}/llvm-ranlib",
+                "-DCMAKE_C_COMPILER_TARGET=#{xtarget}",
+                "-DCMAKE_CXX_COMPILER_TARGET=#{xtarget}",
+                "-DCMAKE_SYSROOT=#{xsysroot}",
+                "-DCMAKE_SYSROOT_LINK=#{xsysroot}",
+                "-DCMAKE_C_FLAGS=#{xcxxflags} #{xcxxnothread}",
+                "-DCMAKE_CXX_FLAGS=#{xcxxflags} #{xcxxnothread}",
+                "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
+                "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
+                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
+                "-DLLVM_TARGETS_TO_BUILD=ARM",
+                "-DLIBUNWIND_ENABLE_ASSERTIONS=ON",
+                "-DLIBUNWIND_ENABLE_PEDANTIC=ON",
+                "-DLIBUNWIND_ENABLE_SHARED=OFF",
+                "-DLIBUNWIND_ENABLE_THREADS=OFF",
+                "-DLIBCXXABI_LIBCXX_PATH=#{prefix}",
+                "-DLIBCXXABI_LIBCXX_INCLUDES=#{prefix}/include/c++/v1",
+                "-DLLVM_ENABLE_LIBCXX=TRUE",
+                "-DUNIX=1",
+                "#{buildpath}/libunwind"
+
+      system "ninja"
+      system "ninja install"
+    end # libunwind
+
+    mktemp do
+      puts "--- libcxxabi ---"
+      system "cmake",
+                "-G", "Ninja", "-Wno-dev",
+                "-DCMAKE_INSTALL_PREFIX=#{prefix}",
+                "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
+                "-DCMAKE_SYSTEM_PROCESSOR=arm",
+                "-DCMAKE_SYSTEM_NAME=Generic",
+                "-DCMAKE_CROSSCOMPILING=ON",
+                "-DCMAKE_CXX_COMPILER_FORCED=TRUE",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_C_COMPILER=#{llvm.bin}/clang",
+                "-DCMAKE_CXX_COMPILER=#{llvm.bin}/clang++",
+                "-DCMAKE_LINKER=#{llvm.bin}/clang",
+                "-DCMAKE_AR=#{llvm.bin}/llvm-ar",
+                "-DCMAKE_RANLIB=#{llvm.bin}/llvm-ranlib",
+                "-DCMAKE_C_COMPILER_TARGET=#{xtarget}",
+                "-DCMAKE_CXX_COMPILER_TARGET=#{xtarget}",
+                "-DCMAKE_SYSROOT=#{xsysroot}",
+                "-DCMAKE_SYSROOT_LINK=#{xsysroot}",
+                "-DCMAKE_C_FLAGS=#{xcxxflags}",
+                "-DCMAKE_CXX_FLAGS=#{xcxxflags}",
+                "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
+                "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
+                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
+                "-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON",
+                "-DLIBCXXABI_USE_COMPILER_RT=ON",
+                "-DLIBCXXABI_ENABLE_THREADS=OFF",
+                "-DLIBCXXABI_ENABLE_SHARED=OFF",
+                "-DLIBCXXABI_BAREMETAL=ON",
+                "-DLIBCXXABI_USE_LLVM_UNWINDER=ON",
+                "-DLIBCXXABI_SILENT_TERMINATE=ON",
+                "-DLIBCXXABI_INCLUDE_TESTS=OFF",
+                "-DLIBCXXABI_LIBCXX_SRC_DIRS=#{buildpath}/libcxx",
+                "-DLIBCXXABI_LIBUNWIND_LINK_FLAGS=-L#{prefix}/lib",
+                "-DLIBCXXABI_LIBCXX_PATH=#{buildpath}/libcxx",
+                "-DLIBCXXABI_LIBCXX_INCLUDES=#{prefix}/include/c++/v1",
+                "-DUNIX=1",
+                "#{buildpath}/libcxxabi"
+
+      system "ninja"
+      system "ninja install"
+    end # libcxxabi
+
+  end # install
+
+end # formula
