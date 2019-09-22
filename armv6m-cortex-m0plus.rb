@@ -59,7 +59,7 @@ class Armv6mCortexM0plus < Formula
     xabi = "-mthumb -mabi=aapcs -fshort-enums"
     xcxxfpu = "-mfloat-abi=soft"
     xcxxopts = "-g -Os"
-    xcxxfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden"
+    xcxxfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden -fno-use-cxa-atexit"
 
     xcxxtarget = "-mcpu=#{xcpu} #{xabi}"
     xsysroot = "#{prefix}/#{xtarget}/#{xcpudir}"
@@ -236,7 +236,6 @@ class Armv6mCortexM0plus < Formula
                 "-DCMAKE_CXX_FLAGS=#{xcxxflags} #{xcxxnothread}",
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
-                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
                 "-DLIBUNWIND_ENABLE_ASSERTIONS=OFF",
                 "-DLIBUNWIND_ENABLE_PEDANTIC=ON",
                 "-DLIBUNWIND_ENABLE_SHARED=OFF",
