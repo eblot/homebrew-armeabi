@@ -51,7 +51,7 @@ class Armv7mCortexM3 < Formula
     xcpu = "cortex-m3"
     xcpudir = "cortex-m3"
 
-    xabi = "-mthumb -mabi=aapcs"
+    xabi = "-mthumb -mabi=aapcs -fshort-enums"
     xcxxfpu = "-mfloat-abi=soft"
     xcxxopts = "-g -Os"
     xcxxfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden"

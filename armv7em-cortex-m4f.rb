@@ -51,7 +51,7 @@ class Armv7emCortexM4f < Formula
     xcpu = "cortex-m4"
     xcpudir = "cortex-m4f"
 
-    xabi = "-mthumb -mabi=aapcs"
+    xabi = "-mthumb -mabi=aapcs -fshort-enums"
     xcxxfpu = "-mfloat-abi=hard -mfpu=fpv4-sp-d16"
     xcxxopts = "-g -Os"
     xcxxfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden"

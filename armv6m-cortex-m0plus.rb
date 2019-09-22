@@ -56,7 +56,7 @@ class Armv6mCortexM0plus < Formula
     xcpu = "cortex-m0plus"
     xcpudir = "cortex-m0plus"
 
-    xabi = "-mthumb -mabi=aapcs"
+    xabi = "-mthumb -mabi=aapcs -fshort-enums"
     xcxxfpu = "-mfloat-abi=soft"
     xcxxopts = "-g -Os"
     xcxxfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden"
