@@ -1,5 +1,5 @@
 class Armv7emCortexM4f < Formula
-  desc "C and C++ libraries for baremetal Cortex-M4 w/VFP targets"
+  desc "C and C++ libraries for baremetal Cortex-M4 with VFP targets"
   homepage "https://llvm.org/"
   # and "https://sourceware.org/newlib/"
 
@@ -31,6 +31,11 @@ class Armv7emCortexM4f < Formula
         url "https://gist.githubusercontent.com/eblot/2f0af31b27cf3d6300b190906ae58c5c/raw/de43bc16b7280c97467af09ef329fc527296226e/newlib-arm-eabi-3.1.0.patch"
         sha256 "e30f7f37c9562ef89685c7a69c25139b1047a13be69a0f82459593e7fc3fab90"
       end
+
+      patch do
+        url "https://gist.githubusercontent.com/eblot/b4adff9922a19efc7f7cbce83c5da482/raw/9da24e5f6a111d11e8715ad676d971142cbdfb3f/strlen-thumb2-Os.S.patch"
+        sha256 "1ea63090cd00c900ef931e0d3b8031a3cb45bfa088a463ecaa537987c6446f79"
+      end
     end
   end
 
@@ -48,9 +53,7 @@ class Armv7emCortexM4f < Formula
 
     xabi = "-mthumb -mabi=aapcs"
     xcxxfpu = "-mfloat-abi=hard -mfpu=fpv4-sp-d16"
-    # it is not possible to use -Os for now, as clang integrated assembler
-    # rejects an ldrb.w opcode, to be fixed.
-    xcxxopts = "-g -O2"
+    xcxxopts = "-g -Os"
     xcxxfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden"
 
     xcxxtarget = "-mcpu=#{xcpu} #{xabi}"
@@ -79,6 +82,10 @@ class Armv7emCortexM4f < Formula
     ENV['AS_FOR_TARGET']="#{llvm.bin}/clang"
 
     host=`cc -dumpmachine`.strip
+
+    # Note: beware that enable assertions disables CMake's NDEBUG flag, which
+    # in turn enable calls to fprintf/fflush and other stdio API, which may
+    # add up 40KB to the final executable...
 
     mktemp do
       puts "--- newlib ---"
@@ -134,7 +141,6 @@ class Armv7emCortexM4f < Formula
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{prefix}/#{xtarget}/#{xcpudir}/lib",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
                 "-DLLVM_DEFAULT_TARGET_TRIPLE=#{xtarget}",
-                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
                 "-DLLVM_TARGETS_TO_BUILD=ARM",
                 "-DCOMPILER_RT_OS_DIR=baremetal",
                 "-DCOMPILER_RT_BUILD_BUILTINS=ON",
@@ -179,8 +185,8 @@ class Armv7emCortexM4f < Formula
                 "-DCMAKE_CXX_FLAGS=#{xcxxflags}",
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
-                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
                 "-DLLVM_TARGETS_TO_BUILD=ARM",
+                "-DLIBCXX_ENABLE_ASSERTIONS=OFF",
                 "-DLIBCXX_ENABLE_SHARED=OFF",
                 "-DLIBCXX_ENABLE_FILESYSTEM=OFF",
                 "-DLIBCXX_ENABLE_THREADS=OFF",
@@ -226,13 +232,10 @@ class Armv7emCortexM4f < Formula
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
                 "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
-                "-DLLVM_TARGETS_TO_BUILD=ARM",
-                "-DLIBUNWIND_ENABLE_ASSERTIONS=ON",
+                "-DLIBUNWIND_ENABLE_ASSERTIONS=OFF",
                 "-DLIBUNWIND_ENABLE_PEDANTIC=ON",
                 "-DLIBUNWIND_ENABLE_SHARED=OFF",
                 "-DLIBUNWIND_ENABLE_THREADS=OFF",
-                "-DLIBCXXABI_LIBCXX_PATH=#{prefix}",
-                "-DLIBCXXABI_LIBCXX_INCLUDES=#{prefix}/include/c++/v1",
                 "-DLLVM_ENABLE_LIBCXX=TRUE",
                 "-DUNIX=1",
                 "#{buildpath}/libunwind"
@@ -265,7 +268,7 @@ class Armv7emCortexM4f < Formula
                 "-DCMAKE_CXX_FLAGS=#{xcxxflags}",
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
-                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
+                "-DLIBCXXABI_ENABLE_ASSERTIONS=OFF",
                 "-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON",
                 "-DLIBCXXABI_USE_COMPILER_RT=ON",
                 "-DLIBCXXABI_ENABLE_THREADS=OFF",

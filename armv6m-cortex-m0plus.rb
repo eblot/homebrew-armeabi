@@ -1,7 +1,7 @@
 class Armv6mCortexM0plus < Formula
-  desc "Newlib & compiler runtime for baremetal Cortex-M0+ targets"
-  homepage "https://sourceware.org/newlib/"
-  # and homepage "http://compiler-rt.llvm.org/"
+  desc "C and C++ libraries for baremetal Cortex-M0+ targets"
+  homepage "https://llvm.org/"
+  # and "https://sourceware.org/newlib/"
 
   stable do
     url "https://github.com/llvm/llvm-project/archive/llvmorg-9.0.0.tar.gz"
@@ -58,9 +58,7 @@ class Armv6mCortexM0plus < Formula
 
     xabi = "-mthumb -mabi=aapcs"
     xcxxfpu = "-mfloat-abi=soft"
-    # it is not possible to use -Os for now, as clang integrated assembler
-    # rejects an ldrb.w opcode, to be fixed.
-    xcxxopts = "-g -O2"
+    xcxxopts = "-g -Os"
     xcxxfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden"
 
     xcxxtarget = "-mcpu=#{xcpu} #{xabi}"
@@ -89,6 +87,10 @@ class Armv6mCortexM0plus < Formula
     ENV['AS_FOR_TARGET']="#{llvm.bin}/clang"
 
     host=`cc -dumpmachine`.strip
+
+    # Note: beware that enable assertions disables CMake's NDEBUG flag, which
+    # in turn enable calls to fprintf/fflush and other stdio API, which may
+    # add up 40KB to the final executable...
 
     mktemp do
       puts "--- newlib ---"
@@ -144,7 +146,6 @@ class Armv6mCortexM0plus < Formula
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{prefix}/#{xtarget}/#{xcpudir}/lib",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
                 "-DLLVM_DEFAULT_TARGET_TRIPLE=#{xtarget}",
-                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
                 "-DLLVM_TARGETS_TO_BUILD=ARM",
                 "-DCOMPILER_RT_OS_DIR=baremetal",
                 "-DCOMPILER_RT_BUILD_BUILTINS=ON",
@@ -189,8 +190,8 @@ class Armv6mCortexM0plus < Formula
                 "-DCMAKE_CXX_FLAGS=#{xcxxflags}",
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
-                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
                 "-DLLVM_TARGETS_TO_BUILD=ARM",
+                "-DLIBCXX_ENABLE_ASSERTIONS=OFF",
                 "-DLIBCXX_ENABLE_SHARED=OFF",
                 "-DLIBCXX_ENABLE_FILESYSTEM=OFF",
                 "-DLIBCXX_ENABLE_THREADS=OFF",
@@ -236,13 +237,10 @@ class Armv6mCortexM0plus < Formula
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
                 "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
-                "-DLLVM_TARGETS_TO_BUILD=ARM",
-                "-DLIBUNWIND_ENABLE_ASSERTIONS=ON",
+                "-DLIBUNWIND_ENABLE_ASSERTIONS=OFF",
                 "-DLIBUNWIND_ENABLE_PEDANTIC=ON",
                 "-DLIBUNWIND_ENABLE_SHARED=OFF",
                 "-DLIBUNWIND_ENABLE_THREADS=OFF",
-                "-DLIBCXXABI_LIBCXX_PATH=#{prefix}",
-                "-DLIBCXXABI_LIBCXX_INCLUDES=#{prefix}/include/c++/v1",
                 "-DLLVM_ENABLE_LIBCXX=TRUE",
                 "-DUNIX=1",
                 "#{buildpath}/libunwind"
@@ -275,7 +273,7 @@ class Armv6mCortexM0plus < Formula
                 "-DCMAKE_CXX_FLAGS=#{xcxxflags}",
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
-                "-DLLVM_ABI_BREAKING_CHECKS=WITH_ASSERTS",
+                "-DLIBCXXABI_ENABLE_ASSERTIONS=OFF",
                 "-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON",
                 "-DLIBCXXABI_USE_COMPILER_RT=ON",
                 "-DLIBCXXABI_ENABLE_THREADS=OFF",
