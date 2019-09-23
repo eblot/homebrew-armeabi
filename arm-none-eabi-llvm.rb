@@ -41,6 +41,9 @@ class ArmNoneEabiLlvm < Formula
       system "cmake", "-G", "Ninja", "../llvm", *(std_cmake_args + args)
       system "ninja"
       system "ninja", "install"
+      # add man files that do not get automatically installed
+      system "mkdir -p #{prefix}/share/man/man1"
+      system "cp ../lld/docs/ld.lld.1 ../lldb/docs/lldb.1 ../llvm/docs/llvm-objdump.1 #{prefix}/share/man/man1/"
     end
 
   end
