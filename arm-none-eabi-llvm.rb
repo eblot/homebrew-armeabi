@@ -5,6 +5,13 @@ class ArmNoneEabiLlvm < Formula
   stable do
     url "https://github.com/llvm/llvm-project/archive/llvmorg-9.0.0.tar.gz"
     sha256 "7807fac25330e24e9955ca46cd855dd34bbc9cc4fdba8322366206654d1036f2"
+
+    patch do
+      # D65722: Expand regions for gaps due to explicit address
+      # short .got sections may trigger an overlapping issue w/o it
+      url "https://github.com/llvm/llvm-project/commit/179dc276ebc1e592fb831bb4716e1b70c7f13cd4.diff"
+      sha256 "68fedca404e1208c9d740d0f729403f455fbf4e5994f2880404b5d11da826041"
+    end
   end
 
   head do
@@ -42,8 +49,9 @@ class ArmNoneEabiLlvm < Formula
       system "ninja"
       system "ninja", "install"
       # add man files that do not get automatically installed
-      system "mkdir -p #{prefix}/share/man/man1"
+      system "mkdir -p #{prefix}/share/man/man1 #{prefix}/share/man/man7"
       system "cp ../lld/docs/ld.lld.1 ../lldb/docs/lldb.1 ../llvm/docs/llvm-objdump.1 #{prefix}/share/man/man1/"
+      system "cp ../llvm/docs/re_format.7 #{prefix}/share/man/man7/"
     end
 
   end
