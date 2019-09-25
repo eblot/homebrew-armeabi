@@ -63,22 +63,22 @@ class Armv6mCortexM0plus < Formula
     xcpudir = "cortex-m0plus"
 
     xabi = "-mthumb -mabi=aapcs -fshort-enums"
-    xcxxfpu = "-mfloat-abi=soft"
-    xcxxopts = "-g -Os"
-    xcxxfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden -fno-use-cxa-atexit"
+    xfpu = "-mfloat-abi=soft"
+    xopts = "-g -Os"
+    xcfeatures = "-ffunction-sections -fdata-sections -fno-stack-protector -fvisibility=hidden"
+    xcxxfeatures = "#{xcfeatures} -fno-use-cxa-atexit"
 
-    xcxxtarget = "-mcpu=#{xcpu} #{xabi}"
+    xctarget = "-mcpu=#{xcpu} #{xabi}"
     xsysroot = "#{prefix}/#{xtarget}/#{xcpudir}"
-
-    xcflags = "#{xcxxtarget} #{xcxxfpu} #{xcxxopts} #{xcxxfeatures}"
 
     xcxxdefs = "-D_LIBUNWIND_IS_BAREMETAL=1 -D_GNU_SOURCE=1 -D_POSIX_TIMERS=1 -D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION"
     xcxxnothread = "-D_LIBCPP_HAS_NO_THREADS=1"
 
-    xcxx_inc="-I${xsysroot}/include"
-    xcxx_lib="-L${xsysroot}/lib"
+    xcxx_inc = "-I#{xsysroot}/include"
+    xcxx_lib = "-L#{xsysroot}/lib"
 
-    xcxxflags = "#{xcxxtarget} #{xcxxfpu} #{xcxxopts} #{xcxxfeatures} #{xcxxdefs} #{xcxx_inc}"
+    xcflags = "#{xctarget} #{xfpu} #{xopts} #{xcfeatures}"
+    xcxxflags = "#{xctarget} #{xfpu} #{xopts} #{xcxxfeatures} #{xcxxdefs} #{xcxx_inc}"
 
     (buildpath/"newlib").install resource("newlib")
 
@@ -104,7 +104,7 @@ class Armv6mCortexM0plus < Formula
                 "--host=#{host}",
                 "--build=#{host}",
                 "--target=#{xtarget}",
-                "--prefix=#{prefix}/#{xtarget}/#{xcpudir}",
+                "--prefix=#{xsysroot}",
                 "--disable-newlib-supplied-syscalls",
                 "--enable-newlib-reent-small",
                 "--disable-newlib-fvwrite-in-streamio",
@@ -121,17 +121,18 @@ class Armv6mCortexM0plus < Formula
                 "--disable-newlib-io-long-double",
                 "--disable-nls"
       system "make"
+      # deparallelise (-j1) is required or installer fails to create output dir
       system "make -j1 install; true"
-      system "mv #{prefix}/#{xtarget}/#{xcpudir}/#{xtarget}/* #{prefix}/#{xtarget}/#{xcpudir}/"
-      system "rm -rf #{prefix}/#{xtarget}/#{xcpudir}/#{xtarget}"
-    end
+      system "mv #{xsysroot}/#{xtarget}/* #{xsysroot}/"
+      system "rm -rf #{xsysroot}/#{xtarget}"
+    end # newlib
 
     mktemp do
       puts "--- compiler-rt ---"
       system "cmake",
                 "-G", "Ninja",
                 *(std_cmake_args),
-                "-DCMAKE_INSTALL_PREFIX=#{prefix}",
+                "-DCMAKE_INSTALL_PREFIX=#{xsysroot}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
                 "-DCMAKE_SYSTEM_NAME=Generic",
@@ -145,12 +146,12 @@ class Armv6mCortexM0plus < Formula
                 "-DCMAKE_RANLIB=#{llvm.bin}/llvm-ranlib",
                 "-DCMAKE_C_COMPILER_TARGET=#{xtarget}",
                 "-DCMAKE_ASM_COMPILER_TARGET=#{xtarget}",
-                "-DCMAKE_SYSROOT=#{prefix}/#{xtarget}/#{xcpudir}",
-                "-DCMAKE_SYSROOT_LINK=#{prefix}/#{xtarget}/#{xcpudir}",
+                "-DCMAKE_SYSROOT=#{xsysroot}",
+                "-DCMAKE_SYSROOT_LINK=#{xsysroot}",
                 "-DCMAKE_C_FLAGS=#{xcflags}",
                 "-DCMAKE_ASM_FLAGS=#{xcflags}",
                 "-DCMAKE_CXX_FLAGS=#{xcflags}",
-                "-DCMAKE_EXE_LINKER_FLAGS=-L#{prefix}/#{xtarget}/#{xcpudir}/lib",
+                "-DCMAKE_EXE_LINKER_FLAGS=-L#{xsysroot}/lib",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
                 "-DLLVM_DEFAULT_TARGET_TRIPLE=#{xtarget}",
                 "-DLLVM_TARGETS_TO_BUILD=ARM",
@@ -169,15 +170,16 @@ class Armv6mCortexM0plus < Formula
                 "#{buildpath}/compiler-rt"
       system "ninja"
       system "ninja install"
-      system "mv #{prefix}/lib/baremetal/* #{prefix}/#{xtarget}/#{xcpudir}/lib"
-      system "rmdir #{prefix}/lib/baremetal"
-    end
+      system "mv #{xsysroot}/lib/baremetal/* #{xsysroot}/lib"
+      system "rmdir #{xsysroot}/lib/baremetal"
+    end # compiler-rt
 
     mktemp do
       puts "--- libcxx ---"
       system "cmake",
                 "-G", "Ninja",
                 *(std_cmake_args),
+                "-DCMAKE_INSTALL_PREFIX=#{xsysroot}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
                 "-DCMAKE_SYSTEM_NAME=Generic",
@@ -224,6 +226,7 @@ class Armv6mCortexM0plus < Formula
       system "cmake",
                 "-G", "Ninja",
                 *(std_cmake_args),
+                "-DCMAKE_INSTALL_PREFIX=#{xsysroot}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
                 "-DCMAKE_SYSTEM_NAME=Generic",
@@ -260,6 +263,7 @@ class Armv6mCortexM0plus < Formula
       system "cmake",
                 "-G", "Ninja",
                 *(std_cmake_args),
+                "-DCMAKE_INSTALL_PREFIX=#{xsysroot}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
                 "-DCMAKE_SYSTEM_NAME=Generic",
@@ -290,9 +294,9 @@ class Armv6mCortexM0plus < Formula
                 "-DLIBCXXABI_SILENT_TERMINATE=ON",
                 "-DLIBCXXABI_INCLUDE_TESTS=OFF",
                 "-DLIBCXXABI_LIBCXX_SRC_DIRS=#{buildpath}/libcxx",
-                "-DLIBCXXABI_LIBUNWIND_LINK_FLAGS=-L#{prefix}/lib",
+                "-DLIBCXXABI_LIBUNWIND_LINK_FLAGS=-L#{xsysroot}/lib",
                 "-DLIBCXXABI_LIBCXX_PATH=#{buildpath}/libcxx",
-                "-DLIBCXXABI_LIBCXX_INCLUDES=#{prefix}/include/c++/v1",
+                "-DLIBCXXABI_LIBCXX_INCLUDES=#{xsysroot}/include/c++/v1",
                 "-DUNIX=1",
                 "#{buildpath}/libcxxabi"
       system "ninja"
