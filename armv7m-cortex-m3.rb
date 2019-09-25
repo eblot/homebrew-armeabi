@@ -39,6 +39,12 @@ class Armv7mCortexM3 < Formula
     end
   end
 
+  # build system is stupid enough to consider cross-compiled C++ static
+  # libraries as potential candidates for future LLVM/Clang compiler builds...
+  # do not let this formula to install C++ libraries with system-wide
+  # visibility
+  keg_only "conflict with llvm"
+
   depends_on "arm-none-eabi-llvm" => :build
   depends_on "cmake" => :build
   depends_on "ninja" => :build
@@ -142,6 +148,7 @@ class Armv7mCortexM3 < Formula
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
                 "-DLLVM_DEFAULT_TARGET_TRIPLE=#{xtarget}",
                 "-DLLVM_TARGETS_TO_BUILD=ARM",
+                "-DLLVM_ENABLE_PIC=OFF",
                 "-DCOMPILER_RT_OS_DIR=baremetal",
                 "-DCOMPILER_RT_BUILD_BUILTINS=ON",
                 "-DCOMPILER_RT_BUILD_SANITIZERS=OFF",
@@ -186,6 +193,7 @@ class Armv7mCortexM3 < Formula
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
                 "-DLLVM_TARGETS_TO_BUILD=ARM",
+                "-DLLVM_ENABLE_PIC=OFF",
                 "-DLIBCXX_ENABLE_ASSERTIONS=OFF",
                 "-DLIBCXX_ENABLE_SHARED=OFF",
                 "-DLIBCXX_ENABLE_FILESYSTEM=OFF",
@@ -231,6 +239,7 @@ class Armv7mCortexM3 < Formula
                 "-DCMAKE_CXX_FLAGS=#{xcxxflags} #{xcxxnothread}",
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
+                "-DLLVM_ENABLE_PIC=OFF",
                 "-DLIBUNWIND_ENABLE_ASSERTIONS=OFF",
                 "-DLIBUNWIND_ENABLE_PEDANTIC=ON",
                 "-DLIBUNWIND_ENABLE_SHARED=OFF",
@@ -267,6 +276,7 @@ class Armv7mCortexM3 < Formula
                 "-DCMAKE_CXX_FLAGS=#{xcxxflags}",
                 "-DCMAKE_EXE_LINKER_FLAGS=-L#{xcxx_lib}",
                 "-DLLVM_CONFIG_PATH=#{llvm.bin}/llvm-config",
+                "-DLLVM_ENABLE_PIC=OFF",
                 "-DLIBCXXABI_ENABLE_ASSERTIONS=OFF",
                 "-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON",
                 "-DLIBCXXABI_USE_COMPILER_RT=ON",
