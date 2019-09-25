@@ -124,7 +124,8 @@ class Armv7mCortexM3 < Formula
     mktemp do
       puts "--- compiler-rt ---"
       system "cmake",
-                "-G", "Ninja", "-Wno-dev",
+                "-G", "Ninja",
+                *(std_cmake_args),
                 "-DCMAKE_INSTALL_PREFIX=#{prefix}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
@@ -161,7 +162,6 @@ class Armv7mCortexM3 < Formula
                 "-DCOMPILER_RT_USE_LIBCXX=ON",
                 "-DUNIX=1",
                 "#{buildpath}/compiler-rt"
-
       system "ninja"
       system "ninja install"
       system "mv #{prefix}/lib/baremetal/* #{prefix}/#{xtarget}/#{xcpudir}/lib"
@@ -171,8 +171,8 @@ class Armv7mCortexM3 < Formula
     mktemp do
       puts "--- libcxx ---"
       system "cmake",
-                "-G", "Ninja", "-Wno-dev",
-                "-DCMAKE_INSTALL_PREFIX=#{prefix}",
+                "-G", "Ninja",
+                *(std_cmake_args),
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
                 "-DCMAKE_SYSTEM_NAME=Generic",
@@ -210,7 +210,6 @@ class Armv7mCortexM3 < Formula
                 "-DLIBCXXABI_USE_LLVM_UNWINDER=ON",
                 "-DUNIX=1",
                 "#{buildpath}/libcxx"
-
       system "ninja"
       system "ninja install"
     end # libcxx
@@ -218,8 +217,8 @@ class Armv7mCortexM3 < Formula
     mktemp do
       puts "--- libunwind ---"
       system "cmake",
-                "-G", "Ninja", "-Wno-dev",
-                "-DCMAKE_INSTALL_PREFIX=#{prefix}",
+                "-G", "Ninja",
+                *(std_cmake_args),
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
                 "-DCMAKE_SYSTEM_NAME=Generic",
@@ -247,7 +246,6 @@ class Armv7mCortexM3 < Formula
                 "-DLLVM_ENABLE_LIBCXX=TRUE",
                 "-DUNIX=1",
                 "#{buildpath}/libunwind"
-
       system "ninja"
       system "ninja install"
     end # libunwind
@@ -255,8 +253,8 @@ class Armv7mCortexM3 < Formula
     mktemp do
       puts "--- libcxxabi ---"
       system "cmake",
-                "-G", "Ninja", "-Wno-dev",
-                "-DCMAKE_INSTALL_PREFIX=#{prefix}",
+                "-G", "Ninja",
+                *(std_cmake_args),
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
                 "-DCMAKE_SYSTEM_NAME=Generic",
@@ -292,7 +290,6 @@ class Armv7mCortexM3 < Formula
                 "-DLIBCXXABI_LIBCXX_INCLUDES=#{prefix}/include/c++/v1",
                 "-DUNIX=1",
                 "#{buildpath}/libcxxabi"
-
       system "ninja"
       system "ninja install"
     end # libcxxabi
