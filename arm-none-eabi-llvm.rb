@@ -41,7 +41,7 @@ class ArmNoneEabiLlvm < Formula
       -DLLVM_TARGETS_TO_BUILD=ARM
       -DLLVM_INSTALL_UTILS=ON
       -DLLVM_DEFAULT_TARGET_TRIPLE=arm-none-eabi
-      -DCMAKE_CROSSCOMPILING=True
+      -DCMAKE_CROSSCOMPILING=ON
     ]
 
     mkdir "build" do
