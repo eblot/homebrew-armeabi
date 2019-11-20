@@ -23,7 +23,6 @@ ST STM32L0 and STM32L4 baremetal and ChibiOS applications.
  * Clang/LLVM toolchain w/ additional tools: `arm-none-eabi-llvm.rb`
    * This toolchain does not require any of the GNU tools, as it comes with
      an integrated asssembler and linker, and the `lldb` debugger.
-   * Support the `--HEAD` option to install the development version of LLVM
  * C library (newlib 3.x) and compiler runtime for various targets:
     * Cortex-M4: `armv7em-cortex-m4.rb` (`-lclang_rt.builtins-armv7em`)
     * Cortex-M4 w/ FPU: `armv7em-cortex-m4f.rb` (`-lclang_rt.builtins-armv7em`)
