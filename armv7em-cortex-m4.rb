@@ -4,8 +4,8 @@ class Armv7emCortexM4 < Formula
   # and "https://sourceware.org/newlib/"
 
   stable do
-    url "https://github.com/llvm/llvm-project/archive/llvmorg-9.0.0.tar.gz"
-    sha256 "7807fac25330e24e9955ca46cd855dd34bbc9cc4fdba8322366206654d1036f2"
+    url "https://github.com/llvm/llvm-project/archive/llvmorg-10.0.0.tar.gz"
+    sha256 "b81c96d2f8f40dc61b14a167513d87c0d813aae0251e06e11ae8a4384ca15451"
 
     # use work from Yves Delley
     patch do

@@ -3,15 +3,14 @@ class ArmNoneEabiLlvm < Formula
   homepage "https://llvm.org/"
 
   stable do
-    url "https://github.com/llvm/llvm-project/archive/llvmorg-9.0.0.tar.gz"
-    sha256 "7807fac25330e24e9955ca46cd855dd34bbc9cc4fdba8322366206654d1036f2"
+    url "https://github.com/llvm/llvm-project/archive/llvmorg-10.0.0.tar.gz"
+    sha256 "b81c96d2f8f40dc61b14a167513d87c0d813aae0251e06e11ae8a4384ca15451"
 
-    patch do
-      # D65722: Expand regions for gaps due to explicit address
-      # short .got sections may trigger an overlapping issue w/o it
-      url "https://github.com/llvm/llvm-project/commit/179dc276ebc1e592fb831bb4716e1b70c7f13cd4.diff"
-      sha256 "68fedca404e1208c9d740d0f729403f455fbf4e5994f2880404b5d11da826041"
-    end
+    # D76981: Mark empty NOLOAD output sections SHT_NOBITS instead of SHT_PROGBITS
+    # original URL: https://reviews.llvm.org/D76981
+    # the orignal patch contains a fix for the test, which does not apply
+    # to the v10.0 release; only the fix for LLD is applied
+    patch :DATA
   end
 
   head do
@@ -42,7 +41,12 @@ class ArmNoneEabiLlvm < Formula
       -DLLVM_INSTALL_UTILS=ON
       -DLLVM_DEFAULT_TARGET_TRIPLE=arm-none-eabi
       -DCMAKE_CROSSCOMPILING=ON
+      -DLLDB_USE_SYSTEM_DEBUGSERVER=ON
     ]
+
+    # Force LLDB_USE_SYSTEM_DEBUGSERVER, otherwise LLDB build fails miserably,
+    # trying to link host backend object files while target backend has been
+    # built.
 
     mkdir "build" do
       system "cmake", "-G", "Ninja", "../llvm", *(std_cmake_args + args)
@@ -50,9 +54,22 @@ class ArmNoneEabiLlvm < Formula
       system "ninja", "install"
       # add man files that do not get automatically installed
       system "mkdir -p #{prefix}/share/man/man1 #{prefix}/share/man/man7"
-      system "cp ../lld/docs/ld.lld.1 ../lldb/docs/lldb.1 ../llvm/docs/llvm-objdump.1 #{prefix}/share/man/man1/"
+      system "cp ../lld/docs/ld.lld.1 ../llvm/docs/llvm-objdump.1 #{prefix}/share/man/man1/"
       system "cp ../llvm/docs/re_format.7 #{prefix}/share/man/man7/"
     end
 
   end
 end
+
+__END__
+diff --git a/lld/ELF/ScriptParser.cpp b/lld/ELF/ScriptParser.cpp
+--- a/lld/ELF/ScriptParser.cpp
++++ b/lld/ELF/ScriptParser.cpp
+@@ -746,6 +746,7 @@
+   expect("(");
+   if (consume("NOLOAD")) {
+     cmd->noload = true;
++    cmd->type = SHT_NOBITS;
+   } else {
+     skip(); // This is "COPY", "INFO" or "OVERLAY".
+     cmd->nonAlloc = true;
