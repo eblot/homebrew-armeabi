@@ -24,8 +24,8 @@ class Armv7emCortexM7f < Formula
     end
 
     resource "newlib" do
-      url 'ftp://sourceware.org/pub/newlib/newlib-3.1.0.tar.gz'
-      sha256 'fb4fa1cc21e9060719208300a61420e4089d6de6ef59cf533b57fe74801d102a'
+      url 'ftp://sourceware.org/pub/newlib/newlib-3.3.0.tar.gz'
+      sha256 '58dd9e3eaedf519360d92d84205c3deef0b3fc286685d1c562e245914ef72c66'
 
       patch do
         url "https://gist.githubusercontent.com/eblot/2f0af31b27cf3d6300b190906ae58c5c/raw/de43bc16b7280c97467af09ef329fc527296226e/newlib-arm-eabi-3.1.0.patch"

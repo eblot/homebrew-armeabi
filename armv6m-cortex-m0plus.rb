@@ -24,8 +24,8 @@ class Armv6mCortexM0plus < Formula
     end
 
     resource "newlib" do
-      url 'ftp://sourceware.org/pub/newlib/newlib-3.1.0.tar.gz'
-      sha256 'fb4fa1cc21e9060719208300a61420e4089d6de6ef59cf533b57fe74801d102a'
+      url 'ftp://sourceware.org/pub/newlib/newlib-3.3.0.tar.gz'
+      sha256 '58dd9e3eaedf519360d92d84205c3deef0b3fc286685d1c562e245914ef72c66'
 
       patch do
         url "https://gist.githubusercontent.com/eblot/2f0af31b27cf3d6300b190906ae58c5c/raw/de43bc16b7280c97467af09ef329fc527296226e/newlib-arm-eabi-3.1.0.patch"
@@ -33,8 +33,8 @@ class Armv6mCortexM0plus < Formula
       end
 
       patch do
-        url "https://github.com/eblot/newlib-cygwin/commit/ef7efeb7ec8ca067d07d00c2c8aabb3fdb124440.diff"
-        sha256 "eb70bb327f8d33148053488a34cfd549e560d209231897f945eba44a0d5da28f"
+        url "https://gist.githubusercontent.com/eblot/43509ee1803b835d1b51f92700efb4d2/raw/c899e4b1b93769faac897694a249ccd339ba24e7/newlib-3.3.0-armv6m.diff"
+        sha256 "ab2a3d5a597f54585ebdde243cc20926f0feabc33afb896f049a130119e8e3a3"
       end
 
       patch do
