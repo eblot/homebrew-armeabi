@@ -2,9 +2,8 @@ require 'formula'
 
 class ArmNoneEabiGcc <Formula
   homepage 'https://gcc.gnu.org'
-  url 'http://ftpmirror.gnu.org/gcc/gcc-7.4.0/gcc-7.4.0.tar.xz'
-  mirror 'http://fr.mirror.babylon.network/gcc/releases/gcc-7.4.0/gcc-7.4.0.tar.xz'
-  sha256 'eddde28d04f334aec1604456e536416549e9b1aa137fc69204e65eb0c009fe51'
+  url 'http://ftpmirror.gnu.org/gcc/gcc-9.3.0/gcc-9.3.0.tar.xz'
+  sha256 '71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
 
   depends_on 'gmp'
   depends_on 'mpfr'
@@ -15,8 +14,8 @@ class ArmNoneEabiGcc <Formula
   depends_on 'gcc' => :build
 
   resource 'newlib' do
-    url 'ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz'
-    sha256 'c8566335ee74e5fcaeb8595b4ebd0400c4b043d6acb3263ecb1314f8f5501332'
+    url 'ftp://sourceware.org/pub/newlib/newlib-3.3.0.tar.gz'
+    sha256 '58dd9e3eaedf519360d92d84205c3deef0b3fc286685d1c562e245914ef72c66'
   end
 
   def install
@@ -26,7 +25,7 @@ class ArmNoneEabiGcc <Formula
     coredir = Dir.pwd
 
     resource('newlib').stage do
-      system 'ditto', Dir.pwd+'/newlib', coredir+'/newlib'
+      cp_r Dir.pwd+'/newlib', coredir+'/newlib'
     end
 
     gmp = Formulary.factory 'gmp'
@@ -50,20 +49,23 @@ class ArmNoneEabiGcc <Formula
     build_dir='build'
     mkdir build_dir
     Dir.chdir build_dir do
-      system coredir+"/configure", "--prefix=#{prefix}", "--target=arm-none-eabi",
-                  "--disable-shared", "--with-gnu-as", "--with-gnu-ld",
-                  "--with-newlib", "--enable-softfloat", "--disable-bigendian",
-                  "--disable-fpu", "--disable-underscore", "--enable-multilibs",
-                  "--with-float=soft", "--enable-interwork", "--enable-lto",
-                  "--with-multilib", "--enable-plugins",
-                  "--with-abi=aapcs", "--enable-languages=c,c++",
-                  "--with-gmp=#{gmp.opt_prefix}",
-                  "--with-mpfr=#{mpfr.opt_prefix}",
-                  "--with-mpc=#{libmpc.opt_prefix}",
-                  "--with-isl=#{isl.opt_prefix}",
-                  "--with-libelf=#{libelf.opt_prefix}",
-                  "--with-gxx-include-dir=#{prefix}/arm-none-eabi/include",
-                  "--disable-debug", "--disable-__cxa_atexit"
+      system coredir+"/configure",
+          "--prefix=#{prefix}", "--target=arm-none-eabi",
+          "--libdir=#{lib}/gcc/arm-none-eabi",
+          "--disable-shared", "--with-gnu-as", "--with-gnu-ld",
+          "--with-newlib", "--enable-softfloat", "--disable-bigendian",
+          "--disable-fpu", "--disable-underscore", "--enable-multilibs",
+          "--with-float=soft", "--enable-interwork", "--enable-lto",
+          "--with-multilib", "--enable-plugins",
+          "--with-abi=aapcs", "--enable-languages=c,c++",
+          "--with-gmp=#{gmp.opt_prefix}",
+          "--with-mpfr=#{mpfr.opt_prefix}",
+          "--with-mpc=#{libmpc.opt_prefix}",
+          "--with-isl=#{isl.opt_prefix}",
+          "--with-libelf=#{libelf.opt_prefix}",
+          "--with-gxx-include-dir=#{prefix}/arm-none-eabi/include",
+          "--enable-checking=release",
+          "--disable-debug", "--disable-__cxa_atexit"
       # Temp. workaround until GCC installation script is fixed
       system "mkdir -p #{prefix}/arm-none-eabi/lib/fpu/interwork"
       system "make"
@@ -71,7 +73,7 @@ class ArmNoneEabiGcc <Formula
     end
 
     ln_s "#{Formulary.factory(armnoneeabi).prefix}/arm-none-eabi/bin",
-                   "#{prefix}/arm-none-eabi/bin"
+         "#{prefix}/arm-none-eabi/bin"
   end
 end
 
