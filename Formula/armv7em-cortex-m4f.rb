@@ -1,3 +1,5 @@
+require "formula"
+
 class Armv7emCortexM4f < Formula
   desc "C and C++ libraries for baremetal Cortex-M4 with VFP targets"
   homepage "https://llvm.org/"

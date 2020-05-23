@@ -1,3 +1,5 @@
+require "formula"
+
 class Armv7emCortexM7f < Formula
   desc "C and C++ libraries for baremetal Cortex-M7 with VFP DP targets"
   homepage "https://llvm.org/"

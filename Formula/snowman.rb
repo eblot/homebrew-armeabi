@@ -1,3 +1,5 @@
+require "formula"
+
 class Snowman < Formula
   desc "Native code to C/C++ decompiler, supporting x86, AMD64, and ARM architectures."
   homepage "http://derevenets.com/"

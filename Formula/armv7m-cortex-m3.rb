@@ -1,3 +1,5 @@
+require "formula"
+
 class Armv7mCortexM3 < Formula
   desc "C and C++ libraries for baremetal Cortex-M3 targets"
   homepage "https://llvm.org/"

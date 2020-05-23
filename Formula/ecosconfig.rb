@@ -1,16 +1,16 @@
-require 'formula'
+require "formula"
 
 class Ecosconfig < Formula
-  homepage 'https://github.com/eblot/ecos'
-  url 'https://github.com/eblot/ecos.git'
-  version '3.10'
+  homepage "https://github.com/eblot/ecos"
+  url "https://github.com/eblot/ecos.git"
+  version "3.10"
 
   def install
 
-    ENV['CFLAGS'] = "-O2 -D__unix__"
-    ENV['CXXFLAGS'] = "-O2 -D__unix__"
+    ENV["CFLAGS"] = "-O2 -D__unix__"
+    ENV["CXXFLAGS"] = "-O2 -D__unix__"
 
-    build_dir='build'
+    build_dir="build"
     mkdir build_dir
     Dir.chdir build_dir do
       system "../host/configure", "--disable-debug",

@@ -1,3 +1,5 @@
+require "formula"
+
 class ArmNoneEabiLlvm < Formula
   desc "Next-gen compiler infrastructure for baremetal ARM Aarch32 targets"
   homepage "https://llvm.org/"

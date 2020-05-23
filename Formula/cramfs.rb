@@ -1,19 +1,19 @@
-require 'formula'
+require "formula"
 
-class Cramfs <Formula
-  url 'http://downloads.sourceforge.net/project/cramfs/cramfs/1.1/cramfs-1.1.tar.gz'
-  homepage 'http://cramfs.sourceforge.net'
-  sha256 '133caca2c4e7c64106555154ee0ff693f5cf5beb9421ce2eb86baee997d22368'
+class Cramfs < Formula
+  url "https://downloads.sourceforge.net/project/cramfs/cramfs/1.1/cramfs-1.1.tar.gz"
+  homepage "https://cramfs.sourceforge.net"
+  sha256 "133caca2c4e7c64106555154ee0ff693f5cf5beb9421ce2eb86baee997d22368"
 
-  depends_on 'cmake'
+  depends_on "cmake"
 
   def patches
     DATA
   end
 
   def install
-    mkdir 'cramfs-build'
-    Dir.chdir 'cramfs-build' do
+    mkdir "cramfs-build"
+    Dir.chdir "cramfs-build" do
       system "cmake .. #{std_cmake_parameters}"
       system "make"
       system "make install"

@@ -1,3 +1,5 @@
+require "formula"
+
 class Armv6mCortexM0plus < Formula
   desc "C and C++ libraries for baremetal Cortex-M0+ targets"
   homepage "https://llvm.org/"

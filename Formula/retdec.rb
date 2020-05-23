@@ -1,3 +1,5 @@
+require "formula"
+
 class Retdec < Formula
   desc "Retargetable machine-code decompiler based on LLVM"
   homepage "https://retdec.com/"
