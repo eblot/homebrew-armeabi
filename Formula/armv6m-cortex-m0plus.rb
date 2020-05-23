@@ -26,8 +26,8 @@ class Armv6mCortexM0plus < Formula
     end
 
     resource "newlib" do
-      url 'ftp://sourceware.org/pub/newlib/newlib-3.3.0.tar.gz'
-      sha256 '58dd9e3eaedf519360d92d84205c3deef0b3fc286685d1c562e245914ef72c66'
+      url "ftp://sourceware.org/pub/newlib/newlib-3.3.0.tar.gz"
+      sha256 "58dd9e3eaedf519360d92d84205c3deef0b3fc286685d1c562e245914ef72c66"
 
       patch do
         url "https://gist.githubusercontent.com/eblot/2f0af31b27cf3d6300b190906ae58c5c/raw/de43bc16b7280c97467af09ef329fc527296226e/newlib-arm-eabi-3.1.0.patch"
@@ -40,7 +40,7 @@ class Armv6mCortexM0plus < Formula
       end
 
       patch do
-        url "https://github.com/eblot/newlib-cygwin/commit/544e68a14f2e1c4c53f04cce84343d7bbf0499d0.diff"
+        url "https://github.com/eblot/newlib-cygwin/commit/544e68a14f2e1c4c53f04cce84343d7bbf0499d0.diff?full_index=1"
         sha256 "f155b4f0dc2ec9c5c5ba1be1454abe8db51e089d22fc2181b91eb94c2fc3ad29"
       end
     end
@@ -58,7 +58,7 @@ class Armv6mCortexM0plus < Formula
   depends_on "python" => :build
 
   def install
-    llvm = Formulary.factory 'arm-none-eabi-llvm'
+    llvm = Formulary.factory "arm-none-eabi-llvm"
 
     xtarget = "armv6m-none-eabi"
     xcpu = "cortex-m0plus"
@@ -73,7 +73,8 @@ class Armv6mCortexM0plus < Formula
     xctarget = "-mcpu=#{xcpu} #{xabi}"
     xsysroot = "#{prefix}/#{xtarget}/#{xcpudir}"
 
-    xcxxdefs = "-D_LIBUNWIND_IS_BAREMETAL=1 -D_GNU_SOURCE=1 -D_POSIX_TIMERS=1 -D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION"
+    xcxxdefs = "-D_LIBUNWIND_IS_BAREMETAL=1 -D_GNU_SOURCE=1 -D_POSIX_TIMERS=1"
+    xcxxdefs = "#{xcxxdefs} -D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION"
     xcxxnothread = "-D_LIBCPP_HAS_NO_THREADS=1"
 
     xcxx_inc = "-I#{xsysroot}/include"
@@ -86,13 +87,13 @@ class Armv6mCortexM0plus < Formula
 
     ENV.append_path "PATH", "#{llvm.bin}"
 
-    ENV['CC_FOR_TARGET']="#{llvm.bin}/clang"
-    ENV['AR_FOR_TARGET']="#{llvm.bin}/llvm-ar"
-    ENV['NM_FOR_TARGET']="#{llvm.bin}/llvm-nm"
-    ENV['RANLIB_FOR_TARGET']="#{llvm.bin}/llvm-ranlib"
-    ENV['READELF_FOR_TARGET']="#{llvm.bin}/llvm-readelf"
-    ENV['CFLAGS_FOR_TARGET']="-target #{xtarget} #{xcflags} -Wno-unused-command-line-argument"
-    ENV['AS_FOR_TARGET']="#{llvm.bin}/clang"
+    ENV["CC_FOR_TARGET"] = "#{llvm.bin}/clang"
+    ENV["AR_FOR_TARGET"] = "#{llvm.bin}/llvm-ar"
+    ENV["NM_FOR_TARGET"] = "#{llvm.bin}/llvm-nm"
+    ENV["RANLIB_FOR_TARGET"] = "#{llvm.bin}/llvm-ranlib"
+    ENV["READELF_FOR_TARGET"] = "#{llvm.bin}/llvm-readelf"
+    ENV["CFLAGS_FOR_TARGET"] = "-target #{xtarget} #{xcflags} -Wno-unused-command-line-argument"
+    ENV["AS_FOR_TARGET"] = "#{llvm.bin}/clang"
 
     host=`cc -dumpmachine`.strip
 
@@ -127,13 +128,14 @@ class Armv6mCortexM0plus < Formula
       system "make -j1 install; true"
       system "mv #{xsysroot}/#{xtarget}/* #{xsysroot}/"
       system "rm -rf #{xsysroot}/#{xtarget}"
-    end # newlib
+    end
+    # newlib
 
     mktemp do
       puts "--- compiler-rt ---"
       system "cmake",
                 "-G", "Ninja",
-                *(std_cmake_args),
+                *std_cmake_args,
                 "-DCMAKE_INSTALL_PREFIX=#{xsysroot}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
@@ -174,13 +176,14 @@ class Armv6mCortexM0plus < Formula
       system "ninja install"
       system "mv #{xsysroot}/lib/baremetal/* #{xsysroot}/lib"
       system "rmdir #{xsysroot}/lib/baremetal"
-    end # compiler-rt
+    end
+    # compiler-rt
 
     mktemp do
       puts "--- libcxx ---"
       system "cmake",
                 "-G", "Ninja",
-                *(std_cmake_args),
+                *std_cmake_args,
                 "-DCMAKE_INSTALL_PREFIX=#{xsysroot}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
@@ -221,13 +224,14 @@ class Armv6mCortexM0plus < Formula
                 "#{buildpath}/libcxx"
       system "ninja"
       system "ninja install"
-    end # libcxx
+    end
+    # libcxx
 
     mktemp do
       puts "--- libunwind ---"
       system "cmake",
                 "-G", "Ninja",
-                *(std_cmake_args),
+                *std_cmake_args,
                 "-DCMAKE_INSTALL_PREFIX=#{xsysroot}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
@@ -258,13 +262,14 @@ class Armv6mCortexM0plus < Formula
                 "#{buildpath}/libunwind"
       system "ninja"
       system "ninja install"
-    end # libunwind
+    end
+    # libunwind
 
     mktemp do
       puts "--- libcxxabi ---"
       system "cmake",
                 "-G", "Ninja",
-                *(std_cmake_args),
+                *std_cmake_args,
                 "-DCMAKE_INSTALL_PREFIX=#{xsysroot}",
                 "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY",
                 "-DCMAKE_SYSTEM_PROCESSOR=arm",
@@ -303,8 +308,9 @@ class Armv6mCortexM0plus < Formula
                 "#{buildpath}/libcxxabi"
       system "ninja"
       system "ninja install"
-    end # libcxxabi
-
-  end # install
-
-end # formula
+    end
+    # libcxxabi
+  end
+  # install
+end
+# formula

@@ -1,7 +1,7 @@
 require "formula"
 
 class ArmNoneEabiLlvm < Formula
-  desc "Next-gen compiler infrastructure for baremetal ARM Aarch32 targets"
+  desc "Next-gen compiler for baremetal ARM Aarch32 targets"
   homepage "https://llvm.org/"
 
   stable do
@@ -27,13 +27,12 @@ class ArmNoneEabiLlvm < Formula
   depends_on "cmake" => :build
   depends_on "ninja" => :build
   depends_on "swig" => :build
-  depends_on "python"
-  depends_on "ncurses"
   depends_on "libedit"
+  depends_on "ncurses"
+  depends_on "python"
 
   def install
-
-    args = %W[
+    args = %w[
       -DCMAKE_BUILD_TYPE=Release
       -DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld;lldb
       -DLLVM_ENABLE_SPHINX=False
@@ -55,11 +54,10 @@ class ArmNoneEabiLlvm < Formula
       system "ninja"
       system "ninja", "install"
       # add man files that do not get automatically installed
-      system "mkdir -p #{prefix}/share/man/man1 #{prefix}/share/man/man7"
-      system "cp ../lld/docs/ld.lld.1 ../llvm/docs/llvm-objdump.1 #{prefix}/share/man/man1/"
-      system "cp ../llvm/docs/re_format.7 #{prefix}/share/man/man7/"
+      system "mkdir -p #{man1} #{man7}"
+      system "cp ../lld/docs/ld.lld.1 ../llvm/docs/llvm-objdump.1 #{man1}"
+      system "cp ../llvm/docs/re_format.7 #{man7}"
     end
-
   end
 end
 

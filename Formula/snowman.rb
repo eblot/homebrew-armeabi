@@ -1,14 +1,14 @@
 require "formula"
 
 class Snowman < Formula
-  desc "Native code to C/C++ decompiler, supporting x86, AMD64, and ARM architectures."
+  desc "Native code to C/C++ decompiler, for x86, AMD64, and ARM"
   homepage "http://derevenets.com/"
   url "https://github.com/yegord/snowman/archive/v0.1.3.tar.gz"
   sha256 "4516b5fa6afd1298902eb09869d61e5617ee62441c36a87106e93abfe1431544"
 
+  depends_on "boost" => :build
   depends_on "cmake" => :build
   depends_on "ninja" => :build
-  depends_on "boost" => :build
   depends_on "qt5"
 
   def install
@@ -18,5 +18,4 @@ class Snowman < Formula
       system "cmake", "--build", ".", "--target", "install"
     end
   end
-
 end
