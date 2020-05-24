@@ -41,7 +41,7 @@ class Armv6mCortexM0plus < Formula
 
       patch do
         url "https://github.com/eblot/newlib-cygwin/commit/544e68a14f2e1c4c53f04cce84343d7bbf0499d0.diff?full_index=1"
-        sha256 "f155b4f0dc2ec9c5c5ba1be1454abe8db51e089d22fc2181b91eb94c2fc3ad29"
+        sha256 "b5e2eb40763712a0a2e1f2fa3fb8df43ed087f2c613e5c92f67cb66d0157cfc4"
       end
     end
   end
