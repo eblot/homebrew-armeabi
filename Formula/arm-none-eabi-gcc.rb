@@ -3,8 +3,8 @@ require "formula"
 class ArmNoneEabiGcc < Formula
   desc "GNU C/C++ compiler for OS-less ARM 32-bit architecture"
   homepage "https://gcc.gnu.org"
-  url "https://ftp.gnu.org/gnu/gcc/gcc-9.3.0/gcc-9.3.0.tar.xz"
-  sha256 "71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1"
+  url 'http://ftpmirror.gnu.org/gcc/gcc-10.1.0/gcc-10.1.0.tar.xz'
+  sha256 'b6898a23844b656f1b68691c5c012036c2e694ac4b53a8918d4712ad876e7ea2'
 
   depends_on "gcc@9" => :build
   depends_on "arm-none-eabi-binutils"
