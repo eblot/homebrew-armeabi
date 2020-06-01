@@ -64,7 +64,7 @@ class ArmNoneEabiGcc < Formula
           "--with-mpc=#{libmpc.opt_prefix}",
           "--with-isl=#{isl.opt_prefix}",
           "--with-libelf=#{libelf.opt_prefix}",
-          "--with-gxx-include-dir=#{prefix}/#{xtarget}/include",
+          "--with-gxx-include-dir=#{prefix}/#{xtarget}/c++/include",
           "--enable-checking=release",
           "--disable-debug", "--disable-__cxa_atexit"
       # Temp. workaround until GCC installation script is fixed
