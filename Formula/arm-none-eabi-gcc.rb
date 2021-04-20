@@ -3,10 +3,9 @@ require "formula"
 class ArmNoneEabiGcc < Formula
   desc "GNU C/C++ compiler for OS-less ARM 32-bit architecture"
   homepage "https://gcc.gnu.org"
-  url 'http://ftpmirror.gnu.org/gcc/gcc-10.1.0/gcc-10.1.0.tar.xz'
-  sha256 'b6898a23844b656f1b68691c5c012036c2e694ac4b53a8918d4712ad876e7ea2'
+  url 'http://ftpmirror.gnu.org/gcc/gcc-10.3.0/gcc-10.3.0.tar.xz'
+  sha256 '64f404c1a650f27fc33da242e1f2df54952e3963a49e06e73f6940f3223ac344'
 
-  depends_on "gcc@9" => :build
   depends_on "arm-none-eabi-binutils"
   depends_on "gmp"
   depends_on "isl"
@@ -15,8 +14,8 @@ class ArmNoneEabiGcc < Formula
   depends_on "mpfr"
 
   resource "newlib" do
-    url "ftp://sourceware.org/pub/newlib/newlib-3.3.0.tar.gz"
-    sha256 "58dd9e3eaedf519360d92d84205c3deef0b3fc286685d1c562e245914ef72c66"
+    url "ftp://sourceware.org/pub/newlib/newlib-4.1.0.tar.gz"
+    sha256 "f296e372f51324224d387cc116dc37a6bd397198756746f93a2b02e9a5d40154"
   end
 
   def install
@@ -35,11 +34,8 @@ class ArmNoneEabiGcc < Formula
     libelf = Formulary.factory "libelf"
     isl = Formulary.factory "isl"
     binutils = Formulary.factory xbinutils
-    gcc9 = Formulary.factory "gcc@9"
 
     # Fix up CFLAGS for cross compilation (default switches cause build issues)
-    ENV["CC"] = "#{gcc9.opt_prefix}/bin/gcc-9"
-    ENV["CXX"] = "#{gcc9.opt_prefix}/bin/g++-9"
     ENV["CFLAGS_FOR_BUILD"] = "-O2"
     ENV["CFLAGS"] = "-O2"
     ENV["CFLAGS_FOR_TARGET"] = "-O2"
@@ -71,6 +67,9 @@ class ArmNoneEabiGcc < Formula
       system "mkdir -p #{prefix}/#{xtarget}/lib/fpu/interwork"
       system "make"
       system "make -j1 -k install"
+      system "(cd #{prefix}/share/info && \
+               for info in *.info; do \
+                  mv $info $(echo $info | sed 's/^/arm-none-eabi-/'); done)"
     end
 
     ln_s "#{binutils.prefix}/#{xtarget}/bin",
