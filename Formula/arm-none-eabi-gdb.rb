@@ -10,7 +10,9 @@ class ArmNoneEabiGdb < Formula
   depends_on "libmpc"
   depends_on "mpfr"
   depends_on "readline"
-  depends_on "python@3.8"
+  depends_on "expat"
+  depends_on "python3"
+  depends_on "arm-none-eabi-binutils"
 
   # Linux dependencies.
   depends_on "guile" unless OS.mac?
@@ -19,10 +21,10 @@ class ArmNoneEabiGdb < Formula
   depends_on "autoconf" => :build
   depends_on "automake" => :build
 
-  patch :DATA
+  patch :DATA if OS.mac?
 
   def install
-    system "autoreconf gdb"
+    system "autoreconf gdb" if OS.mac?
     mkdir "build" do
       system "../configure", "--prefix=#{prefix}",
                 "--target=arm-none-eabi",
@@ -30,11 +32,17 @@ class ArmNoneEabiGdb < Formula
                 "--with-mpfr=#{Formulary.factory("mpfr").prefix}",
                 "--with-mpc=#{Formulary.factory("libmpc").prefix}",
                 "--with-readline=#{Formulary.factory("readline").prefix}",
-                "--with-python",
+                "--with-python=#{Formulary.factory("python3").bin}/python3",
+                "--with-expat=#{Formulary.factory("expat").prefix}",
                 "--without-cloog",
                 "--enable-lto", "--disable-werror"
       system "make"
       system "make install"
+      system "(cd #{prefix}/share/info && \
+               for info in *.info; do \
+                  mv $info $(echo $info | sed 's/^/arm-none-eabi-/'); done &&
+               rm -f arm-none-eabi-bfd.info; true)"
+      # remove bfd.info to avoid conflict with the binutils twin.
     end
   end
 end
