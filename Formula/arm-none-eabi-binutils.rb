@@ -11,7 +11,7 @@ class ArmNoneEabiBinutils < Formula
 
   def install
     mkdir "build" do
-      system "../configure", "--target=arm-none-eabi-",
+      system "../configure", "--target=arm-none-eabi",
                   "--prefix=#{prefix}", "--disable-shared", "--disable-nls",
                   "--with-gmp=#{Formulary.factory("gmp").prefix}",
                   "--with-mpfr=#{Formulary.factory("mpfr").prefix}",
