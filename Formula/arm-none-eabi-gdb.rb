@@ -18,13 +18,20 @@ class ArmNoneEabiGdb < Formula
   depends_on "guile" unless OS.mac?
 
   # need to regenerate configure script after applying patch
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
+  if OS.mac?
+    depends_on "autoconf" => :build
+    depends_on "automake" => :build
 
-  patch :DATA if OS.mac?
+    patch :DATA if OS.mac?
+  end
 
   def install
-    system "autoreconf gdb" if OS.mac?
+    if OS.mac?
+      # as dirty as it sounds, I'm tired of autotools...
+      autoconf = Formulary.factory "autoconf"
+      inreplace "config/override.m4", "[2.69]", "[#{autoconf.version}]"
+      system "autoreconf gdb 2>/dev/null"
+    end
     mkdir "build" do
       system "../configure", "--prefix=#{prefix}",
                 "--target=arm-none-eabi",
