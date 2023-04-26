@@ -3,8 +3,8 @@ require "formula"
 class ArmNoneEabiGcc < Formula
   desc "GNU C/C++ compiler for OS-less ARM 32-bit architecture"
   homepage "https://gcc.gnu.org"
-  url 'http://ftpmirror.gnu.org/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz'
-  sha256 'e549cf9cf3594a00e27b6589d4322d70e0720cdd213f39beb4181e06926230ff'
+  url 'http://ftpmirror.gnu.org/gcc/gcc-13.1.0/gcc-13.1.0.tar.xz'
+  sha256 '61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86'
 
   depends_on "arm-none-eabi-binutils"
   depends_on "gmp"
@@ -13,6 +13,8 @@ class ArmNoneEabiGcc < Formula
   depends_on "libmpc"
   depends_on "mpfr"
   depends_on "texinfo" => :build
+
+  keg_only "conflict with other GCC installations"
 
   resource "newlib" do
     url "ftp://sourceware.org/pub/newlib/newlib-4.2.0.20211231.tar.gz"
