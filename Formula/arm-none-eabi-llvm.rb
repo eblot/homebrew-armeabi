@@ -5,14 +5,8 @@ class ArmNoneEabiLlvm < Formula
   homepage "https://llvm.org/"
 
   stable do
-    url "https://github.com/llvm/llvm-project/archive/llvmorg-10.0.0.tar.gz"
-    sha256 "b81c96d2f8f40dc61b14a167513d87c0d813aae0251e06e11ae8a4384ca15451"
-
-    # D76981: Mark empty NOLOAD output sections SHT_NOBITS instead of SHT_PROGBITS
-    # original URL: https://reviews.llvm.org/D76981
-    # the orignal patch contains a fix for the test, which does not apply
-    # to the v10.0 release; only the fix for LLD is applied
-    patch :DATA
+    url "https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.3/llvm-project-17.0.3.src.tar.xz"
+    sha256 "be5a1e44d64f306bb44fce7d36e3b3993694e8e6122b2348608906283c176db8"
   end
 
   head do
@@ -60,16 +54,3 @@ class ArmNoneEabiLlvm < Formula
     end
   end
 end
-
-__END__
-diff --git a/lld/ELF/ScriptParser.cpp b/lld/ELF/ScriptParser.cpp
---- a/lld/ELF/ScriptParser.cpp
-+++ b/lld/ELF/ScriptParser.cpp
-@@ -746,6 +746,7 @@
-   expect("(");
-   if (consume("NOLOAD")) {
-     cmd->noload = true;
-+    cmd->type = SHT_NOBITS;
-   } else {
-     skip(); // This is "COPY", "INFO" or "OVERLAY".
-     cmd->nonAlloc = true;
